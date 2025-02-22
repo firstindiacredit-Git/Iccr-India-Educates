@@ -318,7 +318,7 @@ const ICCR = () => {
             }}>
                 <Container fluid>
                     <Row className="py-3 align-items-center">
-                        <Col md={3} className="d-flex align-items-center">
+                        <Col xs={12} md={3} className="d-flex align-items-center justify-content-center justify-content-md-start mb-3 mb-md-0">
                             <a href="https://indiaeducates.org/"
                                 target="_blank"
                                 rel="noopener noreferrer"
@@ -331,21 +331,23 @@ const ICCR = () => {
                                     src="/images/IndiaEducatesLogo.png"
                                     alt="India Educates Logo"
                                     style={{
-                                        height: '55px',
+                                        height: '45px',
+                                        maxWidth: '100%',
                                         cursor: 'pointer',
                                         filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))'
                                     }}
                                 />
                             </a>
                         </Col>
-                        <Col md={7}>
+                        <Col xs={12} md={7} className="text-center mb-3 mb-md-0">
                             <div className="d-flex flex-column align-items-center justify-content-center">
                                 <h1 className="mb-0 position-relative" style={{
                                     color: '#1a1a1a',
-                                    fontSize: '2.2rem',
+                                    fontSize: 'clamp(1.5rem, 4vw, 2.2rem)',
                                     fontWeight: '700',
                                     letterSpacing: '1px',
-                                    textShadow: '2px 2px 4px rgba(0,0,0,0.1)'
+                                    textShadow: '2px 2px 4px rgba(0,0,0,0.1)',
+                                    textAlign: 'center'
                                 }}>
                                     <span className="position-absolute top-0 start-100 translate-middle badge bg-danger rounded-pill"
                                         style={{
@@ -359,7 +361,7 @@ const ICCR = () => {
                                 </h1>
                                 <div className="d-flex align-items-center mt-2">
                                     <span style={{
-                                        fontSize: '1rem',
+                                        fontSize: 'clamp(0.875rem, 2vw, 1rem)',
                                         color: '#666',
                                         fontWeight: '500'
                                     }}>
@@ -368,17 +370,18 @@ const ICCR = () => {
                                 </div>
                             </div>
                         </Col>
-                        <Col md={2} className="text-end d-flex align-items-center justify-content-end">
+                        <Col xs={12} md={2} className="d-flex align-items-center justify-content-center">
                             <Button
                                 className="px-4 py-2 d-flex align-items-center"
                                 style={{
                                     backgroundColor: '#ff5722',
                                     border: 'none',
                                     borderRadius: '50px',
-                                    fontSize: '15px',
+                                    fontSize: 'clamp(0.875rem, 2vw, 15px)',
                                     fontWeight: '600',
                                     boxShadow: '0 4px 12px rgba(255,87,34,0.3)',
-                                    transition: 'all 0.3s ease'
+                                    transition: 'all 0.3s ease',
+                                    width: 'fit-content'
                                 }}
                                 onClick={scrollToApplicationForm}
                                 onMouseOver={(e) => {
@@ -393,9 +396,6 @@ const ICCR = () => {
                                 }}
                             >
                                 <span className="me-2">APPLY NOW</span>
-                                {/* <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M1 8H15M15 8L8 1M15 8L8 15" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                </svg> */}
                             </Button>
                         </Col>
                     </Row>
@@ -411,11 +411,11 @@ const ICCR = () => {
                                 backgroundImage: 'url("/images/iccr.png")',
                                 backgroundSize: 'cover',
                                 backgroundPosition: 'center',
-                                height: '500px',
+                                minHeight: 'clamp(300px, 50vw, 500px)',
                                 display: 'flex',
                                 flexDirection: 'column',
                                 justifyContent: 'center',
-                                padding: '0 20px',
+                                padding: '20px',
                                 position: 'relative',
                             }}>
                                 {/* Dark overlay */}
@@ -435,15 +435,37 @@ const ICCR = () => {
                                     zIndex: 1,
                                     textAlign: 'left',
                                     maxWidth: '800px',
-                                    marginLeft: '100px'
+                                    margin: '0 auto',
+                                    padding: '0 20px'
                                 }}>
                                     <div className="mb-4">
-                                        <h5 className="text-uppercase mb-3" style={{ letterSpacing: '2px' }}>YOUR PATHWAY TO EXCELLENCE</h5>
-                                        <h1 className="display-3 fw-bold mb-3" style={{ fontSize: '3.5rem', lineHeight: '1.2' }}>OFFER OF SCHOLARSHIPS TO STUDY IN INDIA </h1>
-                                        <p className="lead mb-4 fw-semibold">UNDER ICCR AFRICA SCHOLARSHIPS SCHEME: 2024-25
+                                        <h5 className="text-uppercase mb-3" 
+                                            style={{ 
+                                                letterSpacing: '2px',
+                                                fontSize: 'clamp(0.875rem, 2vw, 1rem)'
+                                            }}>
+                                            YOUR PATHWAY TO EXCELLENCE
+                                        </h5>
+                                        <h1 className="display-3 fw-bold mb-3" 
+                                            style={{ 
+                                                fontSize: 'clamp(2rem, 5vw, 3.5rem)', 
+                                                lineHeight: '1.2' 
+                                            }}>
+                                            OFFER OF SCHOLARSHIPS TO STUDY IN INDIA
+                                        </h1>
+                                        <p className="lead mb-4 fw-semibold"
+                                            style={{
+                                                fontSize: 'clamp(1rem, 2.5vw, 1.25rem)'
+                                            }}>
+                                            UNDER ICCR AFRICA SCHOLARSHIPS SCHEME: 2024-25
                                         </p>
                                     </div>
-                                    <Alert className="d-inline-block text-light rounded-pill fw-bold" style={{ backgroundColor: '#ff5722', border: 'none' }}>
+                                    <Alert className="d-inline-block text-light rounded-pill fw-bold" 
+                                        style={{ 
+                                            backgroundColor: '#ff5722', 
+                                            border: 'none',
+                                            fontSize: 'clamp(0.875rem, 2vw, 1rem)'
+                                        }}>
                                         Application Deadline: May 31, 2024
                                     </Alert>
                                 </div>
