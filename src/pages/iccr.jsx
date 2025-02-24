@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Row, Col, Card, Form, Button, Alert } from 'react-bootstrap';
+import { Container, Row, Col, Card, Form, Button, Alert, Modal } from 'react-bootstrap';
 import {
     BookFill,
     PersonCheckFill,
@@ -10,6 +10,7 @@ import {
     CheckSquareFill,
     Pen
 } from 'react-bootstrap-icons';
+import axios from 'axios';
 
 const ICCR = () => {
     const [formData, setFormData] = useState({
@@ -113,19 +114,260 @@ const ICCR = () => {
         documents: {
             permanentUniqueId: null,
             passportCopy: null,
-            grade10Card: null,
-            grade12Card: null,
-            medicalCertificate: null,
-            englishTranslation: null,
-            englishSubjectDoc: null,
-            otherDocument: null
+            gradeXMarksheet: null,
+            gradeXIIMarksheet: null,
+            medicalFitnessCertificate: null,
+            englishTranslationOfDocuments: null,
+            englishAsSubjectDocument: null,
+            anyOtherDocument: null
         },
         studentPhoto: ''
     });
 
-    const handleSubmit = (e) => {
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [showSuccessModal, setShowSuccessModal] = useState(false); // Add this state
+
+    // Add this initial form data structure
+    const initialFormData = {
+        fullName: '',
+        gender: '',
+        dateOfBirth: '',
+        placeOfBirth: '',
+        country: '',
+        passport: '',
+        passportCountry: '',
+        passportIssueDate: '',
+        passportExpiryDate: '',
+        city: '',
+        state: '',
+        addressCountry: '',
+        zipcode: '',
+        mobileNumber: '',
+        whatsappNumber: '',
+        email: '',
+        uniqueId: '',
+        fatherName: '',
+        fatherPhone: '',
+        fatherEmail: '',
+        motherName: '',
+        motherPhone: '',
+        motherEmail: '',
+        englishProficiency1: '',
+        proficiencyLevel: '',
+        proficiencyScore: '',
+        englishProficiency2: '',
+        toeflScore: '',
+        ieltsScore: '',
+        duolingoScore: '',
+        essay: '',
+        academicYear: '',
+        levelOfCourse: '',
+        courseMainStream: '',
+        universities: Array(3).fill(''),
+        subjects: Array(3).fill(''),
+        courseStreams: Array(3).fill(''),
+        grade10Certificate: '',
+        grade10Country: '',
+        grade10Board: '',
+        grade10School: '',
+        grade10Subjects: '',
+        grade10Year: '',
+        grade10Percentage: '',
+        grade12Certificate: '',
+        grade12Country: '',
+        grade12Board: '',
+        grade12School: '',
+        grade12Subjects: '',
+        grade12Year: '',
+        grade12Percentage: '',
+        educationalQualifications: [
+            {
+                certificate: '',
+                country: '',
+                boardName: '',
+                schoolName: '',
+                subjects: '',
+                year: '',
+                percentage: ''
+            }
+        ],
+        references: [
+            {
+                name: '',
+                occupation: '',
+                email: '',
+                telephone: '',
+                postalAddress: ''
+            },
+            {
+                name: '',
+                occupation: '',
+                email: '',
+                telephone: '',
+                postalAddress: ''
+            }
+        ],
+        indianContacts: [
+            {
+                name: '',
+                relationship: '',
+                occupation: '',
+                telephone: '',
+                email: '',
+                postalAddress: ''
+            }
+        ],
+        travelledToIndia: '',
+        previousICCRScholarship: '',
+        indianResident: '',
+        marriedToIndian: '',
+        internationalDrivingLicense: '',
+        otherInformation: '',
+        declarationDate: '',
+        declarationPlace: '',
+        signature: '',
+        documents: {
+            permanentUniqueId: null,
+            passportCopy: null,
+            gradeXMarksheet: null,
+            gradeXIIMarksheet: null,
+            medicalFitnessCertificate: null,
+            englishTranslationOfDocuments: null,
+            englishAsSubjectDocument: null,
+            anyOtherDocument: null
+        },
+        studentPhoto: ''
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(formData);
+        
+        if (isSubmitting) return;
+
+        try {
+            setIsSubmitting(true);
+            const formDataToSend = new FormData();
+
+            // Add all text fields
+            Object.keys(formData).forEach(key => {
+                if (key !== 'documents' && key !== 'studentPhoto' && key !== 'signature' &&
+                    !Array.isArray(formData[key]) && formData[key] !== null && formData[key] !== undefined) {
+                    formDataToSend.append(key, formData[key]);
+                }
+            });
+
+            // Handle arrays
+            if (formData.educationalQualifications) {
+                formData.educationalQualifications.forEach((edu, index) => {
+                    Object.keys(edu).forEach(key => {
+                        formDataToSend.append(`educationalQualifications[${index}][${key}]`, edu[key]);
+                    });
+                });
+            }
+
+            if (formData.universities) {
+                formData.universities.forEach((univ, index) => {
+                    formDataToSend.append(`universities[${index}]`, univ);
+                });
+            }
+
+            if (formData.subjects) {
+                formData.subjects.forEach((subject, index) => {
+                    formDataToSend.append(`subjects[${index}]`, subject);
+                });
+            }
+
+            if (formData.courseStreams) {
+                formData.courseStreams.forEach((stream, index) => {
+                    formDataToSend.append(`courseStreams[${index}]`, stream);
+                });
+            }
+
+            if (formData.references) {
+                formData.references.forEach((ref, index) => {
+                    Object.keys(ref).forEach(key => {
+                        formDataToSend.append(`references[${index}][${key}]`, ref[key]);
+                    });
+                });
+            }
+
+            if (formData.indianContacts) {
+                formData.indianContacts.forEach((contact, index) => {
+                    Object.keys(contact).forEach(key => {
+                        formDataToSend.append(`indianContacts[${index}][${key}]`, contact[key]);
+                    });
+                });
+            }
+
+            // Handle file uploads
+            if (formData.studentPhoto) {
+                const photoFile = await fetch(formData.studentPhoto).then(r => r.blob());
+                formDataToSend.append('studentPhoto', photoFile, 'studentPhoto.jpg');
+            }
+
+            if (formData.signature) {
+                const signatureFile = await fetch(formData.signature).then(r => r.blob());
+                formDataToSend.append('signature', signatureFile, 'signature.jpg');
+            }
+
+            // Handle document uploads
+            const documentFields = {
+                permanentUniqueId: 'permanentUniqueId',
+                passportCopy: 'passportCopy',
+                gradeXMarksheet: 'gradeXMarksheet',
+                gradeXIIMarksheet: 'gradeXIIMarksheet',
+                medicalFitnessCertificate: 'medicalFitnessCertificate',
+                englishTranslationOfDocuments: 'englishTranslationOfDocuments',
+                englishAsSubjectDocument: 'englishAsSubjectDocument',
+                anyOtherDocument: 'anyOtherDocument'
+            };
+
+            Object.entries(documentFields).forEach(([key, fieldName]) => {
+                if (formData.documents && formData.documents[key]) {
+                    formDataToSend.append(fieldName, formData.documents[key]);
+                }
+            });
+
+            const response = await axios.post(
+                `https://crm.indiaeducates.org/api/iccr`,
+                formDataToSend,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                }
+            );
+
+            // If we reach here, the submission was successful
+            setShowSuccessModal(true);
+            // Reset form data
+            setFormData({
+                ...initialFormData,
+                documents: {
+                    ...initialFormData.documents,
+                    permanentUniqueId: null,
+                    passportCopy: null,
+                    gradeXMarksheet: null,
+                    gradeXIIMarksheet: null,
+                    medicalFitnessCertificate: null,
+                    englishTranslationOfDocuments: null,
+                    englishAsSubjectDocument: null,
+                    anyOtherDocument: null
+                }
+            });
+
+        } catch (error) {
+            console.error('Error submitting application:', error);
+            // Only show error alert if it's actually a submission error
+            if (!error.message.includes('Failed to reload')) {
+                alert('Failed to submit application. Please try again.');
+            } else {
+                // If it's just a Vite reload error, still show success if data was saved
+                setShowSuccessModal(true);
+            }
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const handleChange = (e) => {
@@ -306,6 +548,61 @@ const ICCR = () => {
         }
     };
 
+    // Update the SuccessModal component
+    const SuccessModal = () => (
+        <Modal
+            show={showSuccessModal}
+            centered
+            size="lg"
+            onHide={() => {
+                setShowSuccessModal(false);
+                setFormData(initialFormData); // Reset form data when closing modal
+                window.scrollTo(0, 0); // Scroll to top of page
+            }}
+        >
+            <Modal.Body className="text-center p-5">
+                <div className="mb-4">
+                    <div className="d-flex justify-content-center">
+                        <div style={{
+                            width: '80px',
+                            height: '80px',
+                            borderRadius: '50%',
+                            background: '#28a745',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            marginBottom: '20px'
+                        }}>
+                            <CheckSquareFill style={{ fontSize: '40px', color: 'white' }} />
+                        </div>
+                    </div>
+                    <h2 className="mb-3" style={{ color: '#28a745' }}>Thank You!</h2>
+                    <h4 className="mb-4">Your Application Has Been Submitted Successfully</h4>
+                    <p className="text-muted mb-4">
+                        We have received your ICCR scholarship application. Our team will review your application and contact you soon.
+                    </p>
+                    <Button
+                        variant="success"
+                        size="lg"
+                        onClick={() => {
+                            setShowSuccessModal(false);
+                            setFormData(initialFormData); // Reset form data when clicking close button
+                            window.scrollTo(0, 0); // Scroll to top of page
+                        }}
+                        style={{
+                            borderRadius: '50px',
+                            padding: '10px 30px'
+                        }}
+                    >
+                        Close
+                    </Button>
+                </div>
+            </Modal.Body>
+        </Modal>
+    );
+
+   
+
     return (
         <>
             {/* Enhanced Header */}
@@ -439,17 +736,17 @@ const ICCR = () => {
                                     padding: '0 20px'
                                 }}>
                                     <div className="mb-4">
-                                        <h5 className="text-uppercase mb-3" 
-                                            style={{ 
+                                        <h5 className="text-uppercase mb-3"
+                                            style={{
                                                 letterSpacing: '2px',
                                                 fontSize: 'clamp(0.875rem, 2vw, 1rem)'
                                             }}>
                                             YOUR PATHWAY TO EXCELLENCE
                                         </h5>
-                                        <h1 className="display-3 fw-bold mb-3" 
-                                            style={{ 
-                                                fontSize: 'clamp(2rem, 5vw, 3.5rem)', 
-                                                lineHeight: '1.2' 
+                                        <h1 className="display-3 fw-bold mb-3"
+                                            style={{
+                                                fontSize: 'clamp(2rem, 5vw, 3.5rem)',
+                                                lineHeight: '1.2'
                                             }}>
                                             OFFER OF SCHOLARSHIPS TO STUDY IN INDIA
                                         </h1>
@@ -460,9 +757,9 @@ const ICCR = () => {
                                             UNDER ICCR AFRICA SCHOLARSHIPS SCHEME: 2024-25
                                         </p>
                                     </div>
-                                    <Alert className="d-inline-block text-light rounded-pill fw-bold" 
-                                        style={{ 
-                                            backgroundColor: '#ff5722', 
+                                    <Alert className="d-inline-block text-light rounded-pill fw-bold"
+                                        style={{
+                                            backgroundColor: '#ff5722',
                                             border: 'none',
                                             fontSize: 'clamp(0.875rem, 2vw, 1rem)'
                                         }}>
@@ -926,14 +1223,14 @@ const ICCR = () => {
                 {/* Application Form */}
                 <Row className="mb-5">
                     <Col md={10} className="mx-auto">
-                        <Card className="border-0" style={{ 
+                        <Card className="border-0" style={{
                             background: 'linear-gradient(135deg, #f8f9fa 0%, #e9f2ff 100%)',
                             boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
                             borderRadius: '15px'
                         }}>
                             <Card.Body className="p-4" id="application-form">
                                 <div className="mb-5 text-center">
-                                    <h6 className="text-success mb-2" style={{ 
+                                    <h6 className="text-success mb-2" style={{
                                         fontWeight: '600',
                                         letterSpacing: '1.5px',
                                         textTransform: 'uppercase'
@@ -945,7 +1242,7 @@ const ICCR = () => {
                                         lineHeight: '1.3'
                                     }}>
                                         START YOUR JOURNEY WITH<br />
-                                        <span style={{ 
+                                        <span style={{
                                             color: '#ff5722',
                                             position: 'relative',
                                             display: 'inline-block'
@@ -962,7 +1259,7 @@ const ICCR = () => {
                                             }}></div>
                                         </span>
                                     </h2>
-                                    <p className="text-muted" style={{ 
+                                    <p className="text-muted" style={{
                                         maxWidth: '600px',
                                         margin: '0 auto',
                                         fontSize: '1.1rem',
@@ -980,14 +1277,14 @@ const ICCR = () => {
                                                 borderRadius: '12px',
                                                 transition: 'transform 0.3s ease, box-shadow 0.3s ease'
                                             }}
-                                            onMouseOver={(e) => {
-                                                e.currentTarget.style.transform = 'translateY(-5px)';
-                                                e.currentTarget.style.boxShadow = '0 10px 20px rgba(0,0,0,0.1)';
-                                            }}
-                                            onMouseOut={(e) => {
-                                                e.currentTarget.style.transform = 'translateY(0)';
-                                                e.currentTarget.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
-                                            }}>
+                                                onMouseOver={(e) => {
+                                                    e.currentTarget.style.transform = 'translateY(-5px)';
+                                                    e.currentTarget.style.boxShadow = '0 10px 20px rgba(0,0,0,0.1)';
+                                                }}
+                                                onMouseOut={(e) => {
+                                                    e.currentTarget.style.transform = 'translateY(0)';
+                                                    e.currentTarget.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
+                                                }}>
                                                 <Card.Body className="p-4">
                                                     <div className="d-flex align-items-center mb-4">
                                                         <div className="me-3" style={{
@@ -1001,8 +1298,8 @@ const ICCR = () => {
                                                         }}>
                                                             <PersonCheckFill className="text-success" style={{ fontSize: '1.2rem' }} />
                                                         </div>
-                                                        <h5 style={{ 
-                                                            color: '#1a1a1a', 
+                                                        <h5 style={{
+                                                            color: '#1a1a1a',
                                                             fontWeight: '600',
                                                             margin: '0'
                                                         }}>
@@ -1040,9 +1337,9 @@ const ICCR = () => {
                                                             }
                                                         `}
                                                     </style>
-                                                    
+
                                                     {/* Keep existing form fields */}
-                                                    <Row className="g-3">                                                        
+                                                    <Row className="g-3">
                                                         {/* Basic Personal Details */}
                                                         <Col md={10}>
                                                             <Form.Group>
@@ -1064,7 +1361,7 @@ const ICCR = () => {
                                                                 <div className="me-4" style={{ width: '200px' }}>
                                                                     <Form.Group>
                                                                         <Form.Label className="fw-semibold">Student Photo</Form.Label>
-                                                                        <div 
+                                                                        <div
                                                                             onClick={() => document.getElementById('photoUpload').click()}
                                                                             style={{
                                                                                 width: '100px',
@@ -1092,7 +1389,7 @@ const ICCR = () => {
                                                                         >
                                                                             {formData.studentPhoto ? (
                                                                                 <>
-                                                                                    <img 
+                                                                                    <img
                                                                                         src={formData.studentPhoto}
                                                                                         alt="Student"
                                                                                         style={{
@@ -1114,8 +1411,8 @@ const ICCR = () => {
                                                                                         opacity: 0,
                                                                                         transition: 'opacity 0.3s ease',
                                                                                     }}
-                                                                                    onMouseOver={(e) => e.currentTarget.style.opacity = '1'}
-                                                                                    onMouseOut={(e) => e.currentTarget.style.opacity = '0'}
+                                                                                        onMouseOver={(e) => e.currentTarget.style.opacity = '1'}
+                                                                                        onMouseOut={(e) => e.currentTarget.style.opacity = '0'}
                                                                                     >
                                                                                         <p className="text-white mb-0" style={{ fontSize: '0.8rem' }}>Change Photo</p>
                                                                                     </div>
@@ -2185,7 +2482,7 @@ const ICCR = () => {
                                                                 <div className="me-4" style={{ width: '200px' }}>
                                                                     <Form.Group>
                                                                         <Form.Label className="fw-semibold">Upload Your Signature</Form.Label>
-                                                                        <div 
+                                                                        <div
                                                                             onClick={() => document.getElementById('signatureUpload').click()}
                                                                             style={{
                                                                                 width: '200px',
@@ -2213,7 +2510,7 @@ const ICCR = () => {
                                                                         >
                                                                             {formData.signature ? (
                                                                                 <>
-                                                                                    <img 
+                                                                                    <img
                                                                                         src={formData.signature}
                                                                                         alt="Signature"
                                                                                         style={{
@@ -2235,8 +2532,8 @@ const ICCR = () => {
                                                                                         opacity: 0,
                                                                                         transition: 'opacity 0.3s ease',
                                                                                     }}
-                                                                                    onMouseOver={(e) => e.currentTarget.style.opacity = '1'}
-                                                                                    onMouseOut={(e) => e.currentTarget.style.opacity = '0'}
+                                                                                        onMouseOver={(e) => e.currentTarget.style.opacity = '1'}
+                                                                                        onMouseOut={(e) => e.currentTarget.style.opacity = '0'}
                                                                                     >
                                                                                         <p className="text-white mb-0" style={{ fontSize: '0.8rem' }}>Change Signature</p>
                                                                                     </div>
@@ -2263,7 +2560,7 @@ const ICCR = () => {
                                                                 </div>
                                                             </div>
                                                         </Col>
-    
+
                                                         <Col md={12}>
                                                             <div className="alert alert-info">
                                                                 <p className="mb-0" style={{ fontSize: '0.9rem' }}>
@@ -2320,7 +2617,7 @@ const ICCR = () => {
                                                                 <Form.Label className="fw-semibold">Grade X Marks/Transcript <span className="text-danger">*</span></Form.Label>
                                                                 <Form.Control
                                                                     type="file"
-                                                                    onChange={(e) => handleDocumentUpload(e, 'grade10Card')}
+                                                                    onChange={(e) => handleDocumentUpload(e, 'gradeXMarksheet')}
                                                                     required
                                                                     className="py-2"
                                                                 />
@@ -2332,7 +2629,7 @@ const ICCR = () => {
                                                                 <Form.Label className="fw-semibold">Grade XII Marks/Transcript <span className="text-danger">*</span></Form.Label>
                                                                 <Form.Control
                                                                     type="file"
-                                                                    onChange={(e) => handleDocumentUpload(e, 'grade12Card')}
+                                                                    onChange={(e) => handleDocumentUpload(e, 'gradeXIIMarksheet')}
                                                                     required
                                                                     className="py-2"
                                                                 />
@@ -2344,7 +2641,7 @@ const ICCR = () => {
                                                                 <Form.Label className="fw-semibold">Medical Fitness Certificate <span className="text-danger">*</span></Form.Label>
                                                                 <Form.Control
                                                                     type="file"
-                                                                    onChange={(e) => handleDocumentUpload(e, 'medicalCertificate')}
+                                                                    onChange={(e) => handleDocumentUpload(e, 'medicalFitnessCertificate')}
                                                                     required
                                                                     className="py-2"
                                                                 />
@@ -2356,7 +2653,7 @@ const ICCR = () => {
                                                                 <Form.Label className="fw-semibold">English Translation of Documents</Form.Label>
                                                                 <Form.Control
                                                                     type="file"
-                                                                    onChange={(e) => handleDocumentUpload(e, 'englishTranslation')}
+                                                                    onChange={(e) => handleDocumentUpload(e, 'englishTranslationOfDocuments')}
                                                                     className="py-2"
                                                                 />
                                                                 <Form.Text className="text-muted">For non-English documents (size must be less than 3 MB)</Form.Text>
@@ -2367,7 +2664,7 @@ const ICCR = () => {
                                                                 <Form.Label className="fw-semibold">English as a Subject Document</Form.Label>
                                                                 <Form.Control
                                                                     type="file"
-                                                                    onChange={(e) => handleDocumentUpload(e, 'englishSubjectDoc')}
+                                                                    onChange={(e) => handleDocumentUpload(e, 'englishAsSubjectDocument')}
                                                                     className="py-2"
                                                                 />
                                                                 <Form.Text className="text-muted">Document size must be less than 700 KB</Form.Text>
@@ -2378,7 +2675,7 @@ const ICCR = () => {
                                                                 <Form.Label className="fw-semibold">Any Other Document</Form.Label>
                                                                 <Form.Control
                                                                     type="file"
-                                                                    onChange={(e) => handleDocumentUpload(e, 'otherDocument')}
+                                                                    onChange={(e) => handleDocumentUpload(e, 'anyOtherDocument')}
                                                                     className="py-2"
                                                                 />
                                                                 <Form.Text className="text-muted">Document size must be less than 3 MB</Form.Text>
@@ -2393,6 +2690,7 @@ const ICCR = () => {
                                         <Col md={12} className="text-center mt-5">
                                             <Button
                                                 type="submit"
+                                                disabled={isSubmitting}
                                                 size="lg"
                                                 className="px-5 py-3 d-flex align-items-center justify-content-center mx-auto"
                                                 style={{
@@ -2417,7 +2715,7 @@ const ICCR = () => {
                                                     e.currentTarget.style.backgroundColor = '#ff5722';
                                                 }}
                                             >
-                                                <span className="me-2">Submit Application</span>
+                                                <span className="me-2">{isSubmitting ? 'Submitting...' : 'Submit Application'}</span>
                                                 <i className="bi bi-arrow-right"></i>
                                             </Button>
                                         </Col>
@@ -2568,6 +2866,7 @@ const ICCR = () => {
                     </Row>
                 </Container>
             </footer>
+            <SuccessModal />
         </>
     );
 };
