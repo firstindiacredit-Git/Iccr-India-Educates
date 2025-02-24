@@ -754,7 +754,7 @@ const ICCR = () => {
                                             style={{
                                                 fontSize: 'clamp(1rem, 2.5vw, 1.25rem)'
                                             }}>
-                                            UNDER ICCR AFRICA SCHOLARSHIPS SCHEME: 2024-25
+                                            UNDER ICCR AFRICA SCHOLARSHIPS SCHEME: 2025-26
                                         </p>
                                     </div>
                                     <Alert className="d-inline-block text-light rounded-pill fw-bold"
@@ -763,7 +763,7 @@ const ICCR = () => {
                                             border: 'none',
                                             fontSize: 'clamp(0.875rem, 2vw, 1rem)'
                                         }}>
-                                        Application Deadline: May 31, 2024
+                                        Application Deadline: May 31, 2025
                                     </Alert>
                                 </div>
                             </Card.Body>
@@ -797,7 +797,7 @@ const ICCR = () => {
                                                 The Scholarship is given for various courses: Agriculture, Commerce and Management, Engineering, Applied course (Journalism and Communication, Tourism Management, Pharmacy, Computer Application, etc…).
                                             </p>
                                             <p>
-                                                The applications from interested students for the academic year 2024-25. The last date of online application is on 31 May 2024.
+                                                The applications from interested students for the academic year 2025-26. The last date of online application is on 31 May 2025.
                                             </p>
                                         </div>
                                         <div className="mt-4">
@@ -1156,7 +1156,7 @@ const ICCR = () => {
                                                     'Applicants have the option to apply to 5 Universities/Institutes in the order of their preference of study.',
                                                     'Students should submit a 500-word essay in English to ascertain English proficiency while applying online.',
                                                     'In case of engineering courses, students must have Physics, Chemistry & Mathematics in their school leaving examinations.',
-                                                    'For the academic year 2024-25, admissions in Medical/ Paramedical (Nursing / Physiotherapy / anesthesia etc.,) / fashion / law courses / integrated courses such as BALLB (5 Years) / B.Sc. & M.Sc. (5 Years) etc. are not admissible.',
+                                                    'For the academic year 2025-26, admissions in Medical/ Paramedical (Nursing / Physiotherapy / anesthesia etc.,) / fashion / law courses / integrated courses such as BALLB (5 Years) / B.Sc. & M.Sc. (5 Years) etc. are not admissible.',
                                                     'Admission of student on the basis of eligibility from one or more than one Indian University does not guarantee award of ICCR sponsored scholarship. Indian Mission will decide on the award of scholarship to applicant and letter of award of scholarship will be issued to student. For award of scholarship the decision of Indian Mission is final and any query regarding it should be taken up with Indian Mission only.'
                                                 ].map((item, index) => (
                                                     <li key={index} className="mb-3 d-flex align-items-start">
