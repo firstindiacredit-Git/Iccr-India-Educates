@@ -1105,7 +1105,7 @@ const ICCR = () => {
                                 </Col>
                                 <Col md={4}>
                                     <img
-                                        src="/images/documents.jpg"
+                                        src="/images/documents.jpeg"
                                         alt="Required Documents"
                                         className="img-fluid h-100"
                                         style={{
