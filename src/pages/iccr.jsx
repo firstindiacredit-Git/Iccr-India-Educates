@@ -15,7 +15,7 @@ import {
 import axios from 'axios';
 
 const ICCR = () => {
-    
+
 
 
     // Add this function to handle smooth scrolling
@@ -26,7 +26,7 @@ const ICCR = () => {
         }
     };
 
-   
+
 
 
 
@@ -749,8 +749,6 @@ const ICCR = () => {
                     </Col>
                 </Row>
 
-               
-
                 {/* Student Life in India Gallery */}
                 <Row className="mb-5">
                     <Col md={10} className="mx-auto">
@@ -810,6 +808,237 @@ const ICCR = () => {
                                 </Col>
                             ))}
                         </Row>
+                    </Col>
+                </Row>
+
+                {/* Application Form */}
+                <Row className="mb-5">
+                    <Col md={10} className="mx-auto">
+                        <Card className="border-0" style={{
+                            background: 'linear-gradient(135deg, #f8f9fa 0%, #e9f2ff 100%)',
+                            boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
+                            borderRadius: '15px'
+                        }}>
+                            <Card.Body className="p-4" id="application-form">
+                                <div className="mb-5 text-center">
+                                    <h6 className="text-success mb-2" style={{
+                                        fontWeight: '600',
+                                        letterSpacing: '1.5px',
+                                        textTransform: 'uppercase'
+                                    }}>APPLICATION PROCESS</h6>
+                                    <h2 className="mb-3" style={{
+                                        color: '#1a1a1a',
+                                        fontWeight: '700',
+                                        fontSize: '2.5rem',
+                                        lineHeight: '1.3'
+                                    }}>
+                                        START YOUR JOURNEY WITH<br />
+                                        <span style={{
+                                            color: '#ff5722',
+                                            position: 'relative',
+                                            display: 'inline-block'
+                                        }}>
+                                            ICCR SCHOLARSHIP
+                                            <div style={{
+                                                position: 'absolute',
+                                                bottom: '-5px',
+                                                left: '0',
+                                                width: '100%',
+                                                height: '4px',
+                                                background: 'rgba(255,87,34,0.2)',
+                                                borderRadius: '2px'
+                                            }}></div>
+                                        </span>
+                                    </h2>
+                                    <p className="text-muted" style={{
+                                        maxWidth: '600px',
+                                        margin: '0 auto',
+                                        fontSize: '1.1rem',
+                                        lineHeight: '1.6'
+                                    }}>
+                                        Fill out the application form below with accurate information to begin your educational journey in India.
+                                    </p>
+                                </div>
+                                <Form>
+                                    <Row className="g-4">
+                                        <Col md={6}>
+                                            <Form.Group>
+                                                <Form.Label style={{ fontWeight: '500', color: '#333' }}>Full Name</Form.Label>
+                                                <Form.Control
+                                                    type="text"
+                                                    placeholder="Enter your full name"
+                                                    style={{
+                                                        padding: '0.8rem',
+                                                        borderRadius: '8px',
+                                                        border: '1px solid #ced4da',
+                                                        boxShadow: 'none'
+                                                    }}
+                                                />
+                                            </Form.Group>
+                                        </Col>
+                                        <Col md={3}>
+                                            <Form.Group>
+                                                <Form.Label style={{ fontWeight: '500', color: '#333' }}>Country Code</Form.Label>
+                                                <Form.Select
+                                                    style={{
+                                                        padding: '0.8rem',
+                                                        borderRadius: '8px',
+                                                        border: '1px solid #ced4da',
+                                                        boxShadow: 'none'
+                                                    }}
+                                                >
+                                                    <option value="">Select Code</option>
+                                                    <option value="+91">+91 (India)</option>
+                                                    <option value="+1">+1 (USA)</option>
+                                                    <option value="+252">+252 (Somalia)</option>
+                                                    {/* Add more country codes as needed */}
+                                                </Form.Select>
+                                            </Form.Group>
+                                        </Col>
+                                        <Col md={3}>
+                                            <Form.Group>
+                                                <Form.Label style={{ fontWeight: '500', color: '#333' }}>Phone Number</Form.Label>
+                                                <Form.Control
+                                                    type="tel"
+                                                    placeholder="Enter phone number"
+                                                    style={{
+                                                        padding: '0.8rem',
+                                                        borderRadius: '8px',
+                                                        border: '1px solid #ced4da',
+                                                        boxShadow: 'none'
+                                                    }}
+                                                />
+                                            </Form.Group>
+                                        </Col>
+                                        <Col md={6}>
+                                            <Form.Group>
+                                                <Form.Label style={{ fontWeight: '500', color: '#333' }}>Email Address</Form.Label>
+                                                <Form.Control
+                                                    type="email"
+                                                    placeholder="Enter your email"
+                                                    style={{
+                                                        padding: '0.8rem',
+                                                        borderRadius: '8px',
+                                                        border: '1px solid #ced4da',
+                                                        boxShadow: 'none'
+                                                    }}
+                                                />
+                                            </Form.Group>
+                                        </Col>
+                                        <Col md={3}>
+                                            <Form.Group>
+                                                <Form.Label style={{ fontWeight: '500', color: '#333' }}>Date of Birth</Form.Label>
+                                                <Form.Control
+                                                    type="date"
+                                                    style={{
+                                                        padding: '0.8rem',
+                                                        borderRadius: '8px',
+                                                        border: '1px solid #ced4da',
+                                                        boxShadow: 'none'
+                                                    }}
+                                                />
+                                            </Form.Group>
+                                        </Col>
+                                        <Col md={3}>
+                                            <Form.Group>
+                                                <Form.Label style={{ fontWeight: '500', color: '#333' }}>Gender</Form.Label>
+                                                <Form.Select
+                                                    style={{
+                                                        padding: '0.8rem',
+                                                        borderRadius: '8px',
+                                                        border: '1px solid #ced4da',
+                                                        boxShadow: 'none'
+                                                    }}
+                                                >
+                                                    <option value="">Select Gender</option>
+                                                    <option value="male">Male</option>
+                                                    <option value="female">Female</option>
+                                                    <option value="transgender">Transgender</option>
+                                                    <option value="non_binary">Non-binary</option>
+                                                    <option value="gender_fluid">Gender Fluid</option>
+                                                    <option value="agender">Agender</option>
+                                                    <option value="bigender">Bigender</option>
+                                                    <option value="other">Other</option>
+                                                    <option value="prefer_not_to_say">Prefer not to say</option>
+                                                </Form.Select>
+                                            </Form.Group>
+                                        </Col>
+                                        <Col md={6}>
+                                            <Form.Group>
+                                                <Form.Label style={{ fontWeight: '500', color: '#333' }}>Last Qualification</Form.Label>
+                                                <Form.Select
+                                                    style={{
+                                                        padding: '0.8rem',
+                                                        borderRadius: '8px',
+                                                        border: '1px solid #ced4da',
+                                                        boxShadow: 'none'
+                                                    }}
+                                                >
+                                                    <option value="">Select Qualification</option>
+                                                    <option value="high_school">High School</option>
+                                                    <option value="bachelor">Bachelor's Degree</option>
+                                                    <option value="master">Master's Degree</option>
+                                                    <option value="phd">Ph.D.</option>
+                                                </Form.Select>
+                                            </Form.Group>
+                                        </Col>
+                                        <Col md={6}>
+                                            <Form.Group>
+                                                <Form.Label style={{ fontWeight: '500', color: '#333' }}>Course Interested In</Form.Label>
+                                                <Form.Select
+                                                    style={{
+                                                        padding: '0.8rem',
+                                                        borderRadius: '8px',
+                                                        border: '1px solid #ced4da',
+                                                        boxShadow: 'none'
+                                                    }}
+                                                >
+                                                    <option value="">Select Course</option>
+                                                    <option value="engineering">Engineering</option>
+                                                    <option value="management">Management</option>
+                                                    <option value="agriculture">Agriculture</option>
+                                                    <option value="computer_science">Computer Science</option>
+                                                    <option value="pharmacy">Pharmacy</option>
+                                                    <option value="tourism">Tourism</option>
+                                                </Form.Select>
+                                            </Form.Group>
+                                        </Col>
+                                        {/* Submit Button with enhanced styling */}
+                                        <Col md={12} className="text-center mt-5">
+                                            <Button
+                                                type="submit"
+                                                size="lg"
+                                                className="px-5 py-3 d-flex align-items-center justify-content-center mx-auto"
+                                                style={{
+                                                    backgroundColor: '#ff5722',
+                                                    border: 'none',
+                                                    borderRadius: '50px',
+                                                    fontWeight: '600',
+                                                    boxShadow: '0 4px 12px rgba(255,87,34,0.3)',
+                                                    transition: 'all 0.3s ease',
+                                                    minWidth: '250px',
+                                                    position: 'relative',
+                                                    overflow: 'hidden'
+                                                }}
+                                                onMouseOver={(e) => {
+                                                    e.currentTarget.style.transform = 'translateY(-2px)';
+                                                    e.currentTarget.style.boxShadow = '0 6px 15px rgba(40,167,69,0.4)';
+                                                    e.currentTarget.style.backgroundColor = '#28a745';
+                                                }}
+                                                onMouseOut={(e) => {
+                                                    e.currentTarget.style.transform = 'translateY(0)';
+                                                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(255,87,34,0.3)';
+                                                    e.currentTarget.style.backgroundColor = '#ff5722';
+                                                }}
+                                            >
+                                                <span className="me-2">Submit Application</span>
+                                                <i className="bi bi-arrow-right"></i>
+                                            </Button>
+                                        </Col>
+                                    </Row>
+                                </Form>
+                            </Card.Body>
+                        </Card>
                     </Col>
                 </Row>
             </Container>
@@ -891,7 +1120,7 @@ const ICCR = () => {
                     </Row>
                 </Container>
             </footer>
-            
+
         </>
     );
 };
