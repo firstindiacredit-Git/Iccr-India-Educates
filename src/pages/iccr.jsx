@@ -8,7 +8,9 @@ import {
     AwardFill,
     GeoAltFill,
     CheckSquareFill,
-    Pen
+    Pen,
+    TelephoneFill,
+    GlobeAmericas
 } from 'react-bootstrap-icons';
 import axios from 'axios';
 
@@ -241,7 +243,7 @@ const ICCR = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         if (isSubmitting) return;
 
         try {
@@ -601,7 +603,7 @@ const ICCR = () => {
         </Modal>
     );
 
-   
+
 
     return (
         <>
@@ -700,76 +702,178 @@ const ICCR = () => {
             </div>
 
             <Container fluid className="py-5" style={{ backgroundColor: '#f8f9fa', paddingLeft: '2rem', paddingRight: '2rem', paddingTop: '0 !important' }}>
-                {/* Header Banner with Background Image */}
+                {/* Header Banner*/}
+
                 <Row className="mb-5">
                     <Col>
-                        <Card className="text-center border-0 text-white">
-                            <Card.Body className="py-5" style={{
-                                backgroundImage: 'url("/images/iccr.png")',
-                                backgroundSize: 'cover',
-                                backgroundPosition: 'center',
-                                minHeight: 'clamp(300px, 50vw, 500px)',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                justifyContent: 'center',
-                                padding: '20px',
-                                position: 'relative',
+                        <Card className="text-center border-0">
+                            <Card.Body className="p-0" style={{
+                                background: 'linear-gradient(135deg, #1a1a1a 0%, #333 100%)',
+                                borderRadius: '0 0 15px 15px',
+                                overflow: 'hidden',
+                                boxShadow: '0 15px 35px rgba(0, 0, 0, 0.2)'
                             }}>
-                                {/* Dark overlay */}
-                                <div style={{
-                                    position: 'absolute',
-                                    top: 0,
-                                    left: 0,
-                                    right: 0,
-                                    bottom: 0,
-                                    backgroundColor: '#0c1322',
-                                    opacity: 0.85,
-                                }} />
+                                <Row className="g-0">
+                                    <Col md={7} className="text-start p-5 d-flex flex-column justify-content-center">
+                                        <div className="position-relative mb-4">
+                                            <div className="position-absolute" style={{
+                                                top: '-20px',
+                                                left: '-30px',
+                                                width: '150px',
+                                                height: '150px',
+                                                background: 'radial-gradient(circle, rgba(255,87,34,0.1) 0%, transparent 70%)',
+                                                borderRadius: '50%'
+                                            }}></div>
 
-                                {/* Content */}
-                                <div style={{
-                                    position: 'relative',
-                                    zIndex: 1,
-                                    textAlign: 'left',
-                                    maxWidth: '800px',
-                                    margin: '0 auto',
-                                    padding: '0 20px'
-                                }}>
-                                    <div className="mb-4">
-                                        <h5 className="text-uppercase mb-3"
-                                            style={{
-                                                letterSpacing: '2px',
-                                                fontSize: 'clamp(0.875rem, 2vw, 1rem)'
+                                            <span className="badge bg-danger px-3 py-2 mb-3 d-inline-block" style={{
+                                                fontSize: '0.9rem',
+                                                fontWeight: '500',
+                                                letterSpacing: '1px',
+                                                borderRadius: '50px',
+                                                background: 'linear-gradient(45deg, #ff5722, #ff7043) !important'
                                             }}>
-                                            YOUR PATHWAY TO EXCELLENCE
-                                        </h5>
-                                        <h1 className="display-3 fw-bold mb-3"
-                                            style={{
-                                                fontSize: 'clamp(2rem, 5vw, 3.5rem)',
-                                                lineHeight: '1.2'
+                                                ICCR SCHOLARSHIP 2025
+                                            </span>
+
+                                            <h1 className="text-white mb-3 position-relative" style={{
+                                                fontSize: 'clamp(2.5rem, 5vw, 3.5rem)',
+                                                fontWeight: '800',
+                                                lineHeight: '1.2',
+                                                textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+                                                width: 'fit-content'
                                             }}>
-                                            OFFER OF SCHOLARSHIPS TO STUDY IN INDIA
-                                        </h1>
-                                        <p className="lead mb-4 fw-semibold"
-                                            style={{
-                                                fontSize: 'clamp(1rem, 2.5vw, 1.25rem)'
+                                                STUDY IN INDIA
+                                                <div className="position-absolute" style={{
+                                                    bottom: '-10px',
+                                                    left: '0',
+                                                    width: '100px',
+                                                    height: '4px',
+                                                    background: 'linear-gradient(90deg, #ff5722, transparent)',
+                                                    borderRadius: '2px'
+                                                }}></div>
+                                                <div className="position-absolute" style={{
+                                                    bottom: '-10px',
+                                                    right: '0',
+                                                    width: '100px',
+                                                    height: '4px',
+                                                    background: 'linear-gradient(270deg, #28a745, transparent)', // Changed color and direction
+                                                    borderRadius: '2px'
+                                                }}></div>
+                                            </h1>
+
+                                            <h2 className="text-white-50 mb-4" style={{
+                                                fontSize: 'clamp(1.5rem, 2.5vw, 2rem)',
+                                                fontWeight: '600',
+                                                letterSpacing: '0.5px'
                                             }}>
-                                            UNDER ICCR AFRICA SCHOLARSHIPS SCHEME: 2025-26
-                                        </p>
-                                    </div>
-                                    <Alert className="d-inline-block text-light rounded-pill fw-bold"
-                                        style={{
-                                            backgroundColor: '#ff5722',
-                                            border: 'none',
-                                            fontSize: 'clamp(0.875rem, 2vw, 1rem)'
+                                                Avail Fully Funded Scholarship Program
+                                            </h2>
+                                        </div>
+
+                                        <div className="mb-4" style={{
+                                            width: '60rem',
+                                            backgroundColor: '#28a745',
+                                            padding: '10px',
+                                            borderRadius: '10px',
                                         }}>
-                                        Application Deadline: May 31, 2025
-                                    </Alert>
-                                </div>
+                                            <h3 style={{
+                                                color: 'white',
+                                                fontSize: '1.8rem',
+                                                fontWeight: '700',
+                                                marginBottom: '10px',
+                                            }}>
+                                                Get up to <span style={{ color: '#d52637' }}>250-300 US Dollar</span> every month stipend
+                                            </h3>
+                                            <h4 style={{
+                                                color: 'white',
+                                                fontSize: '1.4rem',
+                                                fontWeight: '600'
+                                            }}>
+                                                Register now at just <span style={{ color: '#d52637', fontWeight: '700' }}>65$</span>
+                                            </h4>
+                                        </div>
+
+                                        <div className="d-flex flex-wrap gap-3 mb-4">
+                                            <Button
+                                                className="px-5 py-3 d-flex align-items-center"
+                                                style={{
+                                                    backgroundColor: '#ff5722',
+                                                    border: 'none',
+                                                    borderRadius: '50px',
+                                                    fontSize: '1.2rem',
+                                                    fontWeight: '600',
+                                                    boxShadow: '0 4px 12px rgba(255,87,34,0.3)',
+                                                    transition: 'all 0.3s ease',
+                                                    width: 'fit-content'
+                                                }}
+                                                onClick={scrollToApplicationForm}
+                                                onMouseOver={(e) => {
+                                                    e.currentTarget.style.transform = 'translateY(-2px)';
+                                                    e.currentTarget.style.boxShadow = '0 6px 15px rgba(40,167,69,0.4)';
+                                                    e.currentTarget.style.backgroundColor = '#28a745';
+                                                }}
+                                                onMouseOut={(e) => {
+                                                    e.currentTarget.style.transform = 'translateY(0)';
+                                                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(255,87,34,0.3)';
+                                                    e.currentTarget.style.backgroundColor = '#ff5722';
+                                                }}
+                                            >
+                                                <span className="me-2">APPLY NOW</span>
+                                            </Button>
+                                        </div>
+
+                                        <div className="d-flex flex-wrap gap-3">
+                                            <div className="d-flex align-items-center bg-white bg-opacity-10 p-3 rounded-3">
+                                                <div className="bg-white p-2 rounded-circle me-3">
+                                                    <TelephoneFill style={{ width: '24px', height: '24px', color: '#198754' }} />
+                                                </div>
+                                                <div>
+                                                    <small className="text-white-50 d-block">Call Us</small>
+                                                    <span className="text-white" style={{ fontSize: '1.1rem', fontWeight: '500' }}>
+                                                        +91-9821694911
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div className="d-flex align-items-center bg-white bg-opacity-10 p-3 rounded-3">
+                                                <div className="bg-white p-2 rounded-circle me-3">
+                                                    <GlobeAmericas style={{ width: '24px', height: '24px', color: '#198754' }} />
+                                                </div>
+                                                <div>
+                                                    <small className="text-white-50 d-block">Visit Us</small>
+                                                    <span className="text-white" style={{ fontSize: '1.1rem', fontWeight: '500' }}>
+                                                        indiaeducates.co
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </Col>
+                                    <Col md={5} className="position-relative">
+                                        <div style={{
+                                            position: 'absolute',
+                                            top: 0,
+                                            left: 0,
+                                            right: 0,
+                                            bottom: 0,
+                                            // background: 'linear-gradient(45deg, rgba(26,26,26,0.8) 0%, transparent 100%)',
+                                            zIndex: 1
+                                        }}></div>
+                                        <img
+                                            src="/images/iccr.png"
+                                            alt="Student"
+                                            style={{
+                                                width: '100%',
+                                                height: '100%',
+                                                objectFit: 'cover',
+                                                objectPosition: 'center'
+                                            }}
+                                        />
+                                    </Col>
+                                </Row>
                             </Card.Body>
                         </Card>
                     </Col>
                 </Row>
+
 
                 {/* Main Content with Side Image */}
                 <Row className="mb-5">
@@ -1126,7 +1230,7 @@ const ICCR = () => {
                             <Row className="g-0">
                                 <Col md={4}>
                                     <img
-                                        src="/images/general-info.jpg"
+                                        src="/images/general-info.png"
                                         alt="General Information"
                                         className="img-fluid h-100"
                                         style={{
