@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Row, Col, Card, Form, Button, Alert, Modal } from 'react-bootstrap';
+import { Container, Row, Col, Card, Form, Button, Alert, Modal, Dropdown } from 'react-bootstrap';
 import {
     BookFill,
     PersonCheckFill,
@@ -7,16 +7,99 @@ import {
     InfoCircleFill,
     AwardFill,
     GeoAltFill,
-    CheckSquareFill,
+    Check2,
     Pen,
     TelephoneFill,
     GlobeAmericas
 } from 'react-bootstrap-icons';
 import axios from 'axios';
+import countryData from '../components/country.json';
 
 const ICCR = () => {
+    const [selectedCountry, setSelectedCountry] = useState('');
+    const [selectedGender, setSelectedGender] = useState('');
+    const [selectedQualification, setSelectedQualification] = useState('');
+    const [selectedCourse, setSelectedCourse] = useState('');
+    const [formData, setFormData] = useState({
+        fullName: '',
+        countryCode: '',
+        phoneNumber: '',
+        email: '',
+        dateOfBirth: '',
+        gender: '',
+        lastQualification: '',
+        course: ''
+    });
 
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const [success, setSuccess] = useState(false);
 
+    // Add this state for modal
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
+    
+    // Add initialFormData constant
+    const initialFormData = {
+        fullName: '',
+        phoneNumber: '',
+        email: '',
+        dateOfBirth: '',
+    };
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setError(null);
+        setSuccess(false);
+
+        try {
+            const formPayload = {
+                fullName: formData.fullName,
+                countryCode: selectedCountry ? selectedCountry.split(' ')[0] : '',
+                phoneNumber: formData.phoneNumber,
+                email: formData.email,
+                dateOfBirth: formData.dateOfBirth,
+                gender: selectedGender,
+                lastQualification: selectedQualification,
+                course: selectedCourse
+            };
+
+            const response = await axios.post('https://crm.indiaeducates.org/api/form1', formPayload);
+            
+            if (response.data.success) {
+                setSuccess(true);
+                setShowSuccessModal(true); // Show modal on success
+                // Reset form
+                setFormData(initialFormData);
+                setSelectedCountry('');
+                setSelectedGender('');
+                setSelectedQualification('');
+                setSelectedCourse('');
+            }
+        } catch (err) {
+            if (err.response?.status === 400) {
+                setError('You have already submitted an application with this email or phone number. Please use different contact details.');
+            } else {
+                setError(err.response?.data?.message || 'Something went wrong!');
+            }
+            
+            // Scroll to error message
+            const errorElement = document.querySelector('.alert-danger');
+            if (errorElement) {
+                errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        } finally {
+            setLoading(false);
+        }
+    };
 
     // Add this function to handle smooth scrolling
     const scrollToApplicationForm = () => {
@@ -26,9 +109,59 @@ const ICCR = () => {
         }
     };
 
-
-
-
+    // Success Modal Component
+    const SuccessModal = () => (
+        <Modal
+            show={showSuccessModal}
+            centered
+            size="lg"
+            onHide={() => {
+                setShowSuccessModal(false);
+                setFormData(initialFormData);
+                window.scrollTo(0, 0);
+            }}
+        >
+            <Modal.Body className="text-center p-5">
+                <div className="mb-4">
+                    <div className="d-flex justify-content-center">
+                        <div style={{
+                            width: '80px',
+                            height: '80px',
+                            borderRadius: '50%',
+                            background: '#ff5722',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            marginBottom: '20px'
+                        }}>
+                            <Check2 style={{ fontSize: '40px', color: 'white', borderRadius: '50%' }} />
+                        </div>
+                    </div>
+                    <h2 className="mb-3" style={{ color: '#ff5722' }}>Thank You!</h2>
+                    <h4 className="mb-4">Your Application Has Been Submitted Successfully</h4>
+                    <p className="text-muted mb-4">
+                        We have received your ICCR scholarship application. Our team will review your application and contact you soon.
+                    </p>
+                    <Button
+                        size="lg"
+                        onClick={() => {
+                            setShowSuccessModal(false);
+                            setFormData(initialFormData);
+                            window.scrollTo(0, 0);
+                        }}
+                        style={{
+                            borderRadius: '50px',
+                            padding: '10px 30px',
+                            backgroundColor: '#28a745',
+                            border: 'none'
+                        }}
+                    >
+                        Close
+                    </Button>
+                </div>
+            </Modal.Body>
+        </Modal>
+    );
 
     return (
         <>
@@ -859,14 +992,18 @@ const ICCR = () => {
                                         Fill out the application form below with accurate information to begin your educational journey in India.
                                     </p>
                                 </div>
-                                <Form>
+                                <Form onSubmit={handleSubmit}>
                                     <Row className="g-4">
                                         <Col md={6}>
                                             <Form.Group>
                                                 <Form.Label style={{ fontWeight: '500', color: '#333' }}>Full Name</Form.Label>
                                                 <Form.Control
                                                     type="text"
+                                                    name="fullName"
+                                                    value={formData.fullName}
+                                                    onChange={handleInputChange}
                                                     placeholder="Enter your full name"
+                                                    required
                                                     style={{
                                                         padding: '0.8rem',
                                                         borderRadius: '8px',
@@ -879,20 +1016,47 @@ const ICCR = () => {
                                         <Col md={3}>
                                             <Form.Group>
                                                 <Form.Label style={{ fontWeight: '500', color: '#333' }}>Country Code</Form.Label>
-                                                <Form.Select
-                                                    style={{
-                                                        padding: '0.8rem',
-                                                        borderRadius: '8px',
-                                                        border: '1px solid #ced4da',
-                                                        boxShadow: 'none'
-                                                    }}
-                                                >
-                                                    <option value="">Select Code</option>
-                                                    <option value="+91">+91 (India)</option>
-                                                    <option value="+1">+1 (USA)</option>
-                                                    <option value="+252">+252 (Somalia)</option>
-                                                    {/* Add more country codes as needed */}
-                                                </Form.Select>
+                                                <Dropdown>
+                                                    <Dropdown.Toggle 
+                                                        variant="light" 
+                                                        style={{
+                                                            width: '100%',
+                                                            padding: '0.8rem',
+                                                            borderRadius: '8px',
+                                                            border: '1px solid #ced4da',
+                                                            backgroundColor: '#fff',
+                                                            textAlign: 'left'
+                                                        }}
+                                                    >
+                                                        {selectedCountry || 'Select Country Code'}
+                                                    </Dropdown.Toggle>
+
+                                                    <Dropdown.Menu style={{ 
+                                                        width: '100%',
+                                                        maxHeight: '300px',
+                                                        overflowY: 'auto'
+                                                    }}>
+                                                        {countryData.countries.map((country, index) => (
+                                                            <Dropdown.Item 
+                                                                key={index} 
+                                                                onClick={() => setSelectedCountry(`${country.callingCode} (${country.countryName})`)}
+                                                                className="d-flex align-items-center gap-2"
+                                                            >
+                                                                <img 
+                                                                    src={country.flag} 
+                                                                    alt={country.countryName}
+                                                                    style={{
+                                                                        width: '24px',
+                                                                        height: '18px',
+                                                                        objectFit: 'cover'
+                                                                    }}
+                                                                />
+                                                                <span>{country.callingCode}</span>
+                                                                <span>({country.countryName})</span>
+                                                            </Dropdown.Item>
+                                                        ))}
+                                                    </Dropdown.Menu>
+                                                </Dropdown>
                                             </Form.Group>
                                         </Col>
                                         <Col md={3}>
@@ -900,7 +1064,11 @@ const ICCR = () => {
                                                 <Form.Label style={{ fontWeight: '500', color: '#333' }}>Phone Number</Form.Label>
                                                 <Form.Control
                                                     type="tel"
+                                                    name="phoneNumber"
+                                                    value={formData.phoneNumber}
+                                                    onChange={handleInputChange}
                                                     placeholder="Enter phone number"
+                                                    required
                                                     style={{
                                                         padding: '0.8rem',
                                                         borderRadius: '8px',
@@ -915,7 +1083,11 @@ const ICCR = () => {
                                                 <Form.Label style={{ fontWeight: '500', color: '#333' }}>Email Address</Form.Label>
                                                 <Form.Control
                                                     type="email"
+                                                    name="email"
+                                                    value={formData.email}
+                                                    onChange={handleInputChange}
                                                     placeholder="Enter your email"
+                                                    required
                                                     style={{
                                                         padding: '0.8rem',
                                                         borderRadius: '8px',
@@ -930,6 +1102,10 @@ const ICCR = () => {
                                                 <Form.Label style={{ fontWeight: '500', color: '#333' }}>Date of Birth</Form.Label>
                                                 <Form.Control
                                                     type="date"
+                                                    name="dateOfBirth"
+                                                    value={formData.dateOfBirth}
+                                                    onChange={handleInputChange}
+                                                    required
                                                     style={{
                                                         padding: '0.8rem',
                                                         borderRadius: '8px',
@@ -942,72 +1118,168 @@ const ICCR = () => {
                                         <Col md={3}>
                                             <Form.Group>
                                                 <Form.Label style={{ fontWeight: '500', color: '#333' }}>Gender</Form.Label>
-                                                <Form.Select
-                                                    style={{
-                                                        padding: '0.8rem',
-                                                        borderRadius: '8px',
-                                                        border: '1px solid #ced4da',
-                                                        boxShadow: 'none'
-                                                    }}
-                                                >
-                                                    <option value="">Select Gender</option>
-                                                    <option value="male">Male</option>
-                                                    <option value="female">Female</option>
-                                                    <option value="transgender">Transgender</option>
-                                                    <option value="non_binary">Non-binary</option>
-                                                    <option value="gender_fluid">Gender Fluid</option>
-                                                    <option value="agender">Agender</option>
-                                                    <option value="bigender">Bigender</option>
-                                                    <option value="other">Other</option>
-                                                    <option value="prefer_not_to_say">Prefer not to say</option>
-                                                </Form.Select>
+                                                <Dropdown>
+                                                    <Dropdown.Toggle 
+                                                        variant="light" 
+                                                        style={{
+                                                            width: '100%',
+                                                            padding: '0.8rem',
+                                                            borderRadius: '8px',
+                                                            border: '1px solid #ced4da',
+                                                            backgroundColor: '#fff',
+                                                            textAlign: 'left'
+                                                        }}
+                                                    >
+                                                        {selectedGender || 'Select Gender'}
+                                                    </Dropdown.Toggle>
+
+                                                    <Dropdown.Menu style={{ 
+                                                        width: '100%',
+                                                        maxHeight: '300px',
+                                                        overflowY: 'auto'
+                                                    }}>
+                                                        {[
+                                                            'Male',
+                                                            'Female',
+                                                            'Transgender',
+                                                            'Non-binary',
+                                                            'Gender Fluid',
+                                                            'Agender',
+                                                            'Bigender',
+                                                            'Other',
+                                                            'Prefer not to say'
+                                                        ].map((gender, index) => (
+                                                            <Dropdown.Item 
+                                                                key={index} 
+                                                                onClick={() => setSelectedGender(gender)}
+                                                            >
+                                                                {gender}
+                                                            </Dropdown.Item>
+                                                        ))}
+                                                    </Dropdown.Menu>
+                                                </Dropdown>
                                             </Form.Group>
                                         </Col>
                                         <Col md={6}>
                                             <Form.Group>
                                                 <Form.Label style={{ fontWeight: '500', color: '#333' }}>Last Qualification</Form.Label>
-                                                <Form.Select
-                                                    style={{
-                                                        padding: '0.8rem',
-                                                        borderRadius: '8px',
-                                                        border: '1px solid #ced4da',
-                                                        boxShadow: 'none'
-                                                    }}
-                                                >
-                                                    <option value="">Select Qualification</option>
-                                                    <option value="high_school">High School</option>
-                                                    <option value="bachelor">Bachelor's Degree</option>
-                                                    <option value="master">Master's Degree</option>
-                                                    <option value="phd">Ph.D.</option>
-                                                </Form.Select>
+                                                <Dropdown>
+                                                    <Dropdown.Toggle 
+                                                        variant="light" 
+                                                        style={{
+                                                            width: '100%',
+                                                            padding: '0.8rem',
+                                                            borderRadius: '8px',
+                                                            border: '1px solid #ced4da',
+                                                            backgroundColor: '#fff',
+                                                            textAlign: 'left'
+                                                        }}
+                                                    >
+                                                        {selectedQualification || 'Select Qualification'}
+                                                    </Dropdown.Toggle>
+
+                                                    <Dropdown.Menu style={{ 
+                                                        width: '100%',
+                                                        maxHeight: '300px',
+                                                        overflowY: 'auto'
+                                                    }}>
+                                                        {[
+                                                            'High School',
+                                                            'Bachelor\'s Degree',
+                                                            'Master\'s Degree',
+                                                            'Ph.D.'
+                                                        ].map((qualification, index) => (
+                                                            <Dropdown.Item 
+                                                                key={index} 
+                                                                onClick={() => setSelectedQualification(qualification)}
+                                                            >
+                                                                {qualification}
+                                                            </Dropdown.Item>
+                                                        ))}
+                                                    </Dropdown.Menu>
+                                                </Dropdown>
                                             </Form.Group>
                                         </Col>
                                         <Col md={6}>
                                             <Form.Group>
                                                 <Form.Label style={{ fontWeight: '500', color: '#333' }}>Course Interested In</Form.Label>
-                                                <Form.Select
-                                                    style={{
-                                                        padding: '0.8rem',
-                                                        borderRadius: '8px',
-                                                        border: '1px solid #ced4da',
-                                                        boxShadow: 'none'
-                                                    }}
-                                                >
-                                                    <option value="">Select Course</option>
-                                                    <option value="engineering">Engineering</option>
-                                                    <option value="management">Management</option>
-                                                    <option value="agriculture">Agriculture</option>
-                                                    <option value="computer_science">Computer Science</option>
-                                                    <option value="pharmacy">Pharmacy</option>
-                                                    <option value="tourism">Tourism</option>
-                                                </Form.Select>
+                                                <Dropdown>
+                                                    <Dropdown.Toggle 
+                                                        variant="light" 
+                                                        style={{
+                                                            width: '100%',
+                                                            padding: '0.8rem',
+                                                            borderRadius: '8px',
+                                                            border: '1px solid #ced4da',
+                                                            backgroundColor: '#fff',
+                                                            textAlign: 'left'
+                                                        }}
+                                                    >
+                                                        {selectedCourse || 'Select Course'}
+                                                    </Dropdown.Toggle>
+
+                                                    <Dropdown.Menu style={{ 
+                                                        width: '100%',
+                                                        maxHeight: '300px',
+                                                        overflowY: 'auto'
+                                                    }}>
+                                                        {[
+                                                            'Engineering',
+                                                            'Management',
+                                                            'Agriculture',
+                                                            'Computer Science',
+                                                            'Pharmacy',
+                                                            'Tourism'
+                                                        ].map((course, index) => (
+                                                            <Dropdown.Item 
+                                                                key={index} 
+                                                                onClick={() => setSelectedCourse(course)}
+                                                            >
+                                                                {course}
+                                                            </Dropdown.Item>
+                                                        ))}
+                                                    </Dropdown.Menu>
+                                                </Dropdown>
                                             </Form.Group>
                                         </Col>
-                                        {/* Submit Button with enhanced styling */}
+
+                                        {/* Error and Success Messages */}
+                                        {error && (
+                                            <Col md={12}>
+                                                <Alert 
+                                                    variant="danger" 
+                                                    className="mt-3"
+                                                    style={{
+                                                        fontSize: '1rem',
+                                                        padding: '1rem',
+                                                        borderRadius: '8px',
+                                                        backgroundColor: '#f8d7da',
+                                                        borderColor: '#f5c6cb',
+                                                        color: '#721c24',
+                                                        fontWeight: '500'
+                                                    }}
+                                                >
+                                                    <div className="d-flex align-items-center">
+                                                        <i className="bi bi-exclamation-triangle-fill me-2"></i>
+                                                        {error}
+                                                    </div>
+                                                </Alert>
+                                            </Col>
+                                        )}
+                                        {success && (
+                                            <Col md={12}>
+                                                <Alert variant="success" className="mt-3">
+                                                    Application submitted successfully!
+                                                </Alert>
+                                            </Col>
+                                        )}
+
+                                        {/* Submit Button */}
                                         <Col md={12} className="text-center mt-5">
                                             <Button
                                                 type="submit"
                                                 size="lg"
+                                                disabled={loading}
                                                 className="px-5 py-3 d-flex align-items-center justify-content-center mx-auto"
                                                 style={{
                                                     backgroundColor: '#ff5722',
@@ -1021,18 +1293,24 @@ const ICCR = () => {
                                                     overflow: 'hidden'
                                                 }}
                                                 onMouseOver={(e) => {
-                                                    e.currentTarget.style.transform = 'translateY(-2px)';
-                                                    e.currentTarget.style.boxShadow = '0 6px 15px rgba(40,167,69,0.4)';
-                                                    e.currentTarget.style.backgroundColor = '#28a745';
+                                                    if (!loading) {
+                                                        e.currentTarget.style.transform = 'translateY(-2px)';
+                                                        e.currentTarget.style.boxShadow = '0 6px 15px rgba(40,167,69,0.4)';
+                                                        e.currentTarget.style.backgroundColor = '#28a745';
+                                                    }
                                                 }}
                                                 onMouseOut={(e) => {
-                                                    e.currentTarget.style.transform = 'translateY(0)';
-                                                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(255,87,34,0.3)';
-                                                    e.currentTarget.style.backgroundColor = '#ff5722';
+                                                    if (!loading) {
+                                                        e.currentTarget.style.transform = 'translateY(0)';
+                                                        e.currentTarget.style.boxShadow = '0 4px 12px rgba(255,87,34,0.3)';
+                                                        e.currentTarget.style.backgroundColor = '#ff5722';
+                                                    }
                                                 }}
                                             >
-                                                <span className="me-2">Submit Application</span>
-                                                <i className="bi bi-arrow-right"></i>
+                                                <span className="me-2">
+                                                    {loading ? 'Submitting...' : 'Submit Application'}
+                                                </span>
+                                                {!loading && <i className="bi bi-arrow-right"></i>}
                                             </Button>
                                         </Col>
                                     </Row>
@@ -1121,6 +1399,8 @@ const ICCR = () => {
                 </Container>
             </footer>
 
+            {/* Add SuccessModal component before the closing tag */}
+            <SuccessModal />
         </>
     );
 };
