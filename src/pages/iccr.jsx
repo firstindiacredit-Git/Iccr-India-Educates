@@ -261,82 +261,248 @@ const ICCR = () => {
 
             <Container fluid className="py-5" style={{ backgroundColor: '#f8f9fa', paddingLeft: '2rem', paddingRight: '2rem', paddingTop: '0 !important' }}>
                 {/* Header Banner*/}
+                <div className="d-none d-md-block">
+                    <Row className="mb-5">
+                        <Col>
+                            <Card className="text-center border-0">
+                                <Card.Body className="p-0" style={{
+                                    background: 'linear-gradient(135deg, #1a1a1a 0%, #333 100%)',
+                                    borderRadius: '0 0 15px 15px',
+                                    overflow: 'hidden',
+                                    boxShadow: '0 15px 35px rgba(0, 0, 0, 0.2)'
+                                }}>
+                                    <Row className="g-0">
+                                        <Col md={7} className="text-start p-5 d-flex flex-column justify-content-center">
+                                            <div className="position-relative mb-4">
+                                                <div className="position-absolute" style={{
+                                                    top: '-20px',
+                                                    left: '-30px',
+                                                    width: '150px',
+                                                    height: '150px',
+                                                    background: 'radial-gradient(circle, rgba(255,87,34,0.1) 0%, transparent 70%)',
+                                                    borderRadius: '50%'
+                                                }}></div>
 
-                <Row className="mb-5">
-                    <Col>
-                        <Card className="text-center border-0">
-                            <Card.Body className="p-0" style={{
-                                background: 'linear-gradient(135deg, #1a1a1a 0%, #333 100%)',
-                                borderRadius: '0 0 15px 15px',
-                                overflow: 'hidden',
-                                boxShadow: '0 15px 35px rgba(0, 0, 0, 0.2)'
-                            }}>
-                                <Row className="g-0">
-                                    <Col md={7} className="text-start p-5 d-flex flex-column justify-content-center">
-                                        <div className="position-relative mb-4">
-                                            <div className="position-absolute" style={{
-                                                top: '-20px',
-                                                left: '-30px',
-                                                width: '150px',
-                                                height: '150px',
-                                                background: 'radial-gradient(circle, rgba(255,87,34,0.1) 0%, transparent 70%)',
-                                                borderRadius: '50%'
+                                                <span className="badge bg-danger px-3 py-2 mb-3 d-inline-block" style={{
+                                                    fontSize: '0.9rem',
+                                                    fontWeight: '500',
+                                                    letterSpacing: '1px',
+                                                    borderRadius: '50px',
+                                                    background: 'linear-gradient(45deg, #ff5722, #ff7043) !important'
+                                                }}>
+                                                    ICCR SCHOLARSHIP 2025
+                                                </span>
+
+                                                <h1 className="text-white mb-3 position-relative" style={{
+                                                    fontSize: 'clamp(2.5rem, 5vw, 3.5rem)',
+                                                    fontWeight: '800',
+                                                    lineHeight: '1.2',
+                                                    textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+                                                    width: 'fit-content'
+                                                }}>
+                                                    STUDY IN INDIA
+                                                    <div className="position-absolute" style={{
+                                                        bottom: '-10px',
+                                                        left: '0',
+                                                        width: '100px',
+                                                        height: '4px',
+                                                        background: 'linear-gradient(90deg, #ff5722, transparent)',
+                                                        borderRadius: '2px'
+                                                    }}></div>
+                                                    <div className="position-absolute" style={{
+                                                        bottom: '-10px',
+                                                        right: '0',
+                                                        width: '100px',
+                                                        height: '4px',
+                                                        background: 'linear-gradient(270deg, #28a745, transparent)', // Changed color and direction
+                                                        borderRadius: '2px'
+                                                    }}></div>
+                                                </h1>
+
+                                                <h2 className="text-white-50 mb-4" style={{
+                                                    fontSize: 'clamp(1.5rem, 2.5vw, 2rem)',
+                                                    fontWeight: '600',
+                                                    letterSpacing: '0.5px'
+                                                }}>
+                                                    Avail Fully Funded Scholarship Program
+                                                </h2>
+                                            </div>
+
+                                            <div className="mb-4" style={{
+                                                width: '60rem',
+                                                backgroundColor: '#28a745',
+                                                padding: '10px',
+                                                borderRadius: '10px',
+                                            }}>
+                                                <h3 style={{
+                                                    color: 'white',
+                                                    fontSize: '1.8rem',
+                                                    fontWeight: '700',
+                                                    marginBottom: '10px',
+                                                }}>
+                                                    Get up to <span style={{ color: '#d52637' }}>250-300 US Dollar</span> every month stipend
+                                                </h3>
+                                                <h4 style={{
+                                                    color: 'white',
+                                                    fontSize: '1.4rem',
+                                                    fontWeight: '600'
+                                                }}>
+                                                    Register now at just <span style={{ color: '#d52637', fontWeight: '700' }}>65$</span>
+                                                </h4>
+                                            </div>
+
+                                            <div className="d-flex flex-wrap gap-3 mb-4">
+                                                <Button
+                                                    className="px-5 py-3 d-flex align-items-center"
+                                                    style={{
+                                                        backgroundColor: '#ff5722',
+                                                        border: 'none',
+                                                        borderRadius: '50px',
+                                                        fontSize: '1.2rem',
+                                                        fontWeight: '600',
+                                                        boxShadow: '0 4px 12px rgba(255,87,34,0.3)',
+                                                        transition: 'all 0.3s ease',
+                                                        width: 'fit-content'
+                                                    }}
+                                                    onClick={scrollToApplicationForm}
+                                                    onMouseOver={(e) => {
+                                                        e.currentTarget.style.transform = 'translateY(-2px)';
+                                                        e.currentTarget.style.boxShadow = '0 6px 15px rgba(40,167,69,0.4)';
+                                                        e.currentTarget.style.backgroundColor = '#28a745';
+                                                    }}
+                                                    onMouseOut={(e) => {
+                                                        e.currentTarget.style.transform = 'translateY(0)';
+                                                        e.currentTarget.style.boxShadow = '0 4px 12px rgba(255,87,34,0.3)';
+                                                        e.currentTarget.style.backgroundColor = '#ff5722';
+                                                    }}
+                                                >
+                                                    <span className="me-2">APPLY NOW</span>
+                                                </Button>
+                                            </div>
+
+                                            <div className="d-flex flex-wrap gap-3">
+                                                <a href="https://wa.me/918383968877" target="_blank" rel="noopener noreferrer" className="text-decoration-none">
+                                                    <div className="d-flex align-items-center bg-white bg-opacity-10 p-3 rounded-3">
+                                                        <div className="bg-white p-2 rounded-circle me-3">
+                                                            <TelephoneFill style={{ width: '24px', height: '24px', color: '#198754' }} />
+                                                        </div>
+                                                        <div>
+                                                            <small className="text-white-50 d-block">Call Us</small>
+                                                            <span className="text-white" style={{ fontSize: '1.1rem', fontWeight: '500' }}>
+                                                                +91-9821694911
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                <a href="https://indiaeducates.org/" target="_blank" rel="noopener noreferrer" className="text-decoration-none">
+                                                    <div className="d-flex align-items-center bg-white bg-opacity-10 p-3 rounded-3">
+                                                        <div className="bg-white p-2 rounded-circle me-3">
+                                                            <GlobeAmericas style={{ width: '24px', height: '24px', color: '#198754' }} />
+                                                        </div>
+                                                        <div>
+                                                            <small className="text-white-50 d-block">Visit Us</small>
+                                                            <span className="text-white" style={{ fontSize: '1.1rem', fontWeight: '500' }}>
+                                                                indiaeducates.org
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </Col>
+                                        <Col md={5} className="position-relative">
+                                            <div style={{
+                                                position: 'absolute',
+                                                top: 0,
+                                                left: 0,
+                                                right: 0,
+                                                bottom: 0,
+                                                // background: 'linear-gradient(45deg, rgba(26,26,26,0.8) 0%, transparent 100%)',
+                                                zIndex: 1
                                             }}></div>
+                                            <img
+                                                src="/images/iccr.png"
+                                                alt="Student"
+                                                style={{
+                                                    width: '100%',
+                                                    height: '100%',
+                                                    objectFit: 'cover',
+                                                    objectPosition: 'center'
+                                                }}
+                                            />
+                                        </Col>
+                                    </Row>
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                    </Row>
+                </div>
+                {/* Mobile Banner - shown only on screens smaller than md */}
+                <div className="d-block d-md-none">
+                    <Row className="mb-5">
+                        <Col>
+                            <Card className="text-center border-0">
+                                <Card.Body className="p-0" style={{
+                                    background: 'linear-gradient(135deg, #1a1a1a 0%, #333 100%)',
+                                    borderRadius: '0 0 15px 15px',
+                                    overflow: 'hidden',
+                                    boxShadow: '0 15px 35px rgba(0, 0, 0, 0.2)'
+                                }}>
+                                    <div className="position-relative">
+                                        <img
+                                            src="/images/iccr.png"
+                                            alt="Student"
+                                            style={{
+                                                width: '100%',
+                                                height: '200px',
+                                                objectFit: 'cover',
+                                                objectPosition: 'center'
+                                            }}
+                                        />
+                                        <div style={{
+                                            position: 'absolute',
+                                            bottom: 0,
+                                            left: 0,
+                                            right: 0,
+                                            background: 'linear-gradient(transparent, rgba(0,0,0,0.7))',
+                                            height: '50%'
+                                        }}></div>
+                                    </div>
 
-                                            <span className="badge bg-danger px-3 py-2 mb-3 d-inline-block" style={{
-                                                fontSize: '0.9rem',
-                                                fontWeight: '500',
-                                                letterSpacing: '1px',
-                                                borderRadius: '50px',
-                                                background: 'linear-gradient(45deg, #ff5722, #ff7043) !important'
-                                            }}>
-                                                ICCR SCHOLARSHIP 2025
-                                            </span>
+                                    <div className="p-4">
+                                        <span className="badge bg-danger px-3 py-2 mb-3 d-inline-block" style={{
+                                            fontSize: '0.8rem',
+                                            fontWeight: '500',
+                                            letterSpacing: '1px',
+                                            borderRadius: '50px',
+                                            background: 'linear-gradient(45deg, #ff5722, #ff7043) !important'
+                                        }}>
+                                            ICCR SCHOLARSHIP 2025
+                                        </span>
 
-                                            <h1 className="text-white mb-3 position-relative" style={{
-                                                fontSize: 'clamp(2.5rem, 5vw, 3.5rem)',
-                                                fontWeight: '800',
-                                                lineHeight: '1.2',
-                                                textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
-                                                width: 'fit-content'
-                                            }}>
-                                                STUDY IN INDIA
-                                                <div className="position-absolute" style={{
-                                                    bottom: '-10px',
-                                                    left: '0',
-                                                    width: '100px',
-                                                    height: '4px',
-                                                    background: 'linear-gradient(90deg, #ff5722, transparent)',
-                                                    borderRadius: '2px'
-                                                }}></div>
-                                                <div className="position-absolute" style={{
-                                                    bottom: '-10px',
-                                                    right: '0',
-                                                    width: '100px',
-                                                    height: '4px',
-                                                    background: 'linear-gradient(270deg, #28a745, transparent)', // Changed color and direction
-                                                    borderRadius: '2px'
-                                                }}></div>
-                                            </h1>
+                                        <h1 className="text-white mb-3" style={{
+                                            fontSize: 'clamp(2rem, 5vw, 2.5rem)',
+                                            fontWeight: '800',
+                                            lineHeight: '1.2',
+                                            textShadow: '2px 2px 4px rgba(0,0,0,0.3)'
+                                        }}>
+                                            STUDY IN INDIA
+                                        </h1>
 
-                                            <h2 className="text-white-50 mb-4" style={{
-                                                fontSize: 'clamp(1.5rem, 2.5vw, 2rem)',
-                                                fontWeight: '600',
-                                                letterSpacing: '0.5px'
-                                            }}>
-                                                Avail Fully Funded Scholarship Program
-                                            </h2>
-                                        </div>
+                                        <h2 className="text-white-50 mb-4" style={{
+                                            fontSize: 'clamp(1.2rem, 2.5vw, 1.5rem)',
+                                            fontWeight: '600',
+                                            letterSpacing: '0.5px'
+                                        }}>
+                                            Avail Fully Funded Scholarship Program
+                                        </h2>
 
-                                        <div className="mb-4" style={{
-                                            width: '60rem',
+                                        <div className="mb-4 p-3" style={{
                                             backgroundColor: '#28a745',
-                                            padding: '10px',
                                             borderRadius: '10px',
                                         }}>
                                             <h3 style={{
                                                 color: 'white',
-                                                fontSize: '1.8rem',
+                                                fontSize: '1.4rem',
                                                 fontWeight: '700',
                                                 marginBottom: '10px',
                                             }}>
@@ -344,98 +510,71 @@ const ICCR = () => {
                                             </h3>
                                             <h4 style={{
                                                 color: 'white',
-                                                fontSize: '1.4rem',
+                                                fontSize: '1.2rem',
                                                 fontWeight: '600'
                                             }}>
                                                 Register now at just <span style={{ color: '#d52637', fontWeight: '700' }}>65$</span>
                                             </h4>
                                         </div>
 
-                                        <div className="d-flex flex-wrap gap-3 mb-4">
-                                            <Button
-                                                className="px-5 py-3 d-flex align-items-center"
-                                                style={{
-                                                    backgroundColor: '#ff5722',
-                                                    border: 'none',
-                                                    borderRadius: '50px',
-                                                    fontSize: '1.2rem',
-                                                    fontWeight: '600',
-                                                    boxShadow: '0 4px 12px rgba(255,87,34,0.3)',
-                                                    transition: 'all 0.3s ease',
-                                                    width: 'fit-content'
-                                                }}
-                                                onClick={scrollToApplicationForm}
-                                                onMouseOver={(e) => {
-                                                    e.currentTarget.style.transform = 'translateY(-2px)';
-                                                    e.currentTarget.style.boxShadow = '0 6px 15px rgba(40,167,69,0.4)';
-                                                    e.currentTarget.style.backgroundColor = '#28a745';
-                                                }}
-                                                onMouseOut={(e) => {
-                                                    e.currentTarget.style.transform = 'translateY(0)';
-                                                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(255,87,34,0.3)';
-                                                    e.currentTarget.style.backgroundColor = '#ff5722';
-                                                }}
-                                            >
-                                                <span className="me-2">APPLY NOW</span>
-                                            </Button>
-                                        </div>
+                                        <Button
+                                            className="w-100 py-3 mb-4"
+                                            style={{
+                                                backgroundColor: '#ff5722',
+                                                border: 'none',
+                                                borderRadius: '50px',
+                                                fontSize: '1.1rem',
+                                                fontWeight: '600',
+                                                boxShadow: '0 4px 12px rgba(255,87,34,0.3)',
+                                                transition: 'all 0.3s ease'
+                                            }}
+                                            onClick={scrollToApplicationForm}
+                                            onMouseOver={(e) => {
+                                                e.currentTarget.style.backgroundColor = '#28a745';
+                                                e.currentTarget.style.boxShadow = '0 6px 15px rgba(40,167,69,0.4)';
+                                            }}
+                                            onMouseOut={(e) => {
+                                                e.currentTarget.style.backgroundColor = '#ff5722';
+                                                e.currentTarget.style.boxShadow = '0 4px 12px rgba(255,87,34,0.3)';
+                                            }}
+                                        >
+                                            APPLY NOW
+                                        </Button>
 
-                                        <div className="d-flex flex-wrap gap-3">
-                                            <a href="https://wa.me/918383968877" target="_blank" rel="noopener noreferrer" className="text-decoration-none">
+                                        <div className="d-flex flex-column gap-3">
+                                            <a href="https://wa.me/918383968877" target="_blank" rel="noopener noreferrer" className="text-decoration-none w-100">
                                                 <div className="d-flex align-items-center bg-white bg-opacity-10 p-3 rounded-3">
                                                     <div className="bg-white p-2 rounded-circle me-3">
-                                                        <TelephoneFill style={{ width: '24px', height: '24px', color: '#198754' }} />
+                                                        <TelephoneFill style={{ width: '20px', height: '20px', color: '#198754' }} />
                                                     </div>
                                                     <div>
                                                         <small className="text-white-50 d-block">Call Us</small>
-                                                        <span className="text-white" style={{ fontSize: '1.1rem', fontWeight: '500' }}>
+                                                        <span className="text-white" style={{ fontSize: '1rem', fontWeight: '500' }}>
                                                             +91-9821694911
                                                         </span>
                                                     </div>
                                                 </div>
                                             </a>
-                                            <a href="https://indiaeducates.org/" target="_blank" rel="noopener noreferrer" className="text-decoration-none">
+                                            <a href="https://indiaeducates.org/" target="_blank" rel="noopener noreferrer" className="text-decoration-none w-100">
                                                 <div className="d-flex align-items-center bg-white bg-opacity-10 p-3 rounded-3">
                                                     <div className="bg-white p-2 rounded-circle me-3">
-                                                        <GlobeAmericas style={{ width: '24px', height: '24px', color: '#198754' }} />
+                                                        <GlobeAmericas style={{ width: '20px', height: '20px', color: '#198754' }} />
                                                     </div>
                                                     <div>
                                                         <small className="text-white-50 d-block">Visit Us</small>
-                                                        <span className="text-white" style={{ fontSize: '1.1rem', fontWeight: '500' }}>
+                                                        <span className="text-white" style={{ fontSize: '1rem', fontWeight: '500' }}>
                                                             indiaeducates.org
                                                         </span>
                                                     </div>
                                                 </div>
                                             </a>
                                         </div>
-                                    </Col>
-                                    <Col md={5} className="position-relative">
-                                        <div style={{
-                                            position: 'absolute',
-                                            top: 0,
-                                            left: 0,
-                                            right: 0,
-                                            bottom: 0,
-                                            // background: 'linear-gradient(45deg, rgba(26,26,26,0.8) 0%, transparent 100%)',
-                                            zIndex: 1
-                                        }}></div>
-                                        <img
-                                            src="/images/iccr.png"
-                                            alt="Student"
-                                            style={{
-                                                width: '100%',
-                                                height: '100%',
-                                                objectFit: 'cover',
-                                                objectPosition: 'center'
-                                            }}
-                                        />
-                                    </Col>
-                                </Row>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                </Row>
-
+                                    </div>
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                    </Row>
+                </div>
 
                 {/* Main Content with Side Image */}
                 <Row className="mb-5">
