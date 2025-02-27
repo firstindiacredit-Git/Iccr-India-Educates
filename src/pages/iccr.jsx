@@ -37,7 +37,7 @@ const ICCR = () => {
 
     // Add this state for modal
     const [showSuccessModal, setShowSuccessModal] = useState(false);
-    
+
     // Add initialFormData constant
     const initialFormData = {
         fullName: '',
@@ -73,7 +73,7 @@ const ICCR = () => {
             };
 
             const response = await axios.post('https://crm.indiaeducates.org/api/form1', formPayload);
-            
+
             if (response.data.success) {
                 setSuccess(true);
                 setShowSuccessModal(true); // Show modal on success
@@ -90,7 +90,7 @@ const ICCR = () => {
             } else {
                 setError(err.response?.data?.message || 'Something went wrong!');
             }
-            
+
             // Scroll to error message
             const errorElement = document.querySelector('.alert-danger');
             if (errorElement) {
@@ -381,28 +381,32 @@ const ICCR = () => {
                                         </div>
 
                                         <div className="d-flex flex-wrap gap-3">
-                                            <div className="d-flex align-items-center bg-white bg-opacity-10 p-3 rounded-3">
-                                                <div className="bg-white p-2 rounded-circle me-3">
-                                                    <TelephoneFill style={{ width: '24px', height: '24px', color: '#198754' }} />
+                                            <a href="https://wa.me/918383968877" target="_blank" rel="noopener noreferrer" className="text-decoration-none">
+                                                <div className="d-flex align-items-center bg-white bg-opacity-10 p-3 rounded-3">
+                                                    <div className="bg-white p-2 rounded-circle me-3">
+                                                        <TelephoneFill style={{ width: '24px', height: '24px', color: '#198754' }} />
+                                                    </div>
+                                                    <div>
+                                                        <small className="text-white-50 d-block">Call Us</small>
+                                                        <span className="text-white" style={{ fontSize: '1.1rem', fontWeight: '500' }}>
+                                                            +91-9821694911
+                                                        </span>
+                                                    </div>
                                                 </div>
-                                                <div>
-                                                    <small className="text-white-50 d-block">Call Us</small>
-                                                    <span className="text-white" style={{ fontSize: '1.1rem', fontWeight: '500' }}>
-                                                        +91-9821694911
-                                                    </span>
+                                            </a>
+                                            <a href="https://indiaeducates.org/" target="_blank" rel="noopener noreferrer" className="text-decoration-none">
+                                                <div className="d-flex align-items-center bg-white bg-opacity-10 p-3 rounded-3">
+                                                    <div className="bg-white p-2 rounded-circle me-3">
+                                                        <GlobeAmericas style={{ width: '24px', height: '24px', color: '#198754' }} />
+                                                    </div>
+                                                    <div>
+                                                        <small className="text-white-50 d-block">Visit Us</small>
+                                                        <span className="text-white" style={{ fontSize: '1.1rem', fontWeight: '500' }}>
+                                                            indiaeducates.org
+                                                        </span>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div className="d-flex align-items-center bg-white bg-opacity-10 p-3 rounded-3">
-                                                <div className="bg-white p-2 rounded-circle me-3">
-                                                    <GlobeAmericas style={{ width: '24px', height: '24px', color: '#198754' }} />
-                                                </div>
-                                                <div>
-                                                    <small className="text-white-50 d-block">Visit Us</small>
-                                                    <span className="text-white" style={{ fontSize: '1.1rem', fontWeight: '500' }}>
-                                                        indiaeducates.co
-                                                    </span>
-                                                </div>
-                                            </div>
+                                            </a>
                                         </div>
                                     </Col>
                                     <Col md={5} className="position-relative">
@@ -452,14 +456,14 @@ const ICCR = () => {
                                             </h2>
                                         </div>
                                         <div className="text-muted" style={{ lineHeight: '1.8' }}>
-                                            <p className="lead">
+                                            <p>
                                                 The Government of India offer Scholarships to Malagasy and Comorian students through Indian Council for Cultural Relations (ICCR) under Africa Scholarship Scheme to follow Undergraduate, Postgraduate, M. Phil. /Ph.D. course in various reputed Indian Universities/Institutes.
                                             </p>
                                             <p>
                                                 The Scholarship is given for various courses: Agriculture, Commerce and Management, Engineering, Applied course (Journalism and Communication, Tourism Management, Pharmacy, Computer Application, etc…).
                                             </p>
                                             <p>
-                                                The applications from interested students for the academic year 2025-26. The last date of online application is on 31 May 2025.
+                                                The applications from interested students for the academic year 2025-26.
                                             </p>
                                         </div>
                                         <div className="mt-4">
@@ -743,7 +747,7 @@ const ICCR = () => {
                                             <ul className="list-unstyled">
                                                 {[
                                                     'All academic certificates and mark sheet from grade 10 with certified English translation attested by the Ministry of Foreign Affairs, if the original documents are not in English.',
-                                                    'TOEFEL/IELTS and other standardized test scores, if available.',
+                                                    'TOEFL/IELTS and other standardized test scores, if available.',
                                                     'Recommendations/character certificates from existing school/University etc.',
                                                     'Certified copy of valid passport. (Passport should be valid for the duration of the course applied for.)',
                                                     'GMAT score for Commerce and Management course. (If required by the University)',
@@ -1017,8 +1021,8 @@ const ICCR = () => {
                                             <Form.Group>
                                                 <Form.Label style={{ fontWeight: '500', color: '#333' }}>Country Code</Form.Label>
                                                 <Dropdown>
-                                                    <Dropdown.Toggle 
-                                                        variant="light" 
+                                                    <Dropdown.Toggle
+                                                        variant="light"
                                                         style={{
                                                             width: '100%',
                                                             padding: '0.8rem',
@@ -1031,19 +1035,19 @@ const ICCR = () => {
                                                         {selectedCountry || 'Select Country Code'}
                                                     </Dropdown.Toggle>
 
-                                                    <Dropdown.Menu style={{ 
+                                                    <Dropdown.Menu style={{
                                                         width: '100%',
                                                         maxHeight: '300px',
                                                         overflowY: 'auto'
                                                     }}>
                                                         {countryData.countries.map((country, index) => (
-                                                            <Dropdown.Item 
-                                                                key={index} 
+                                                            <Dropdown.Item
+                                                                key={index}
                                                                 onClick={() => setSelectedCountry(`${country.callingCode} (${country.countryName})`)}
                                                                 className="d-flex align-items-center gap-2"
                                                             >
-                                                                <img 
-                                                                    src={country.flag} 
+                                                                <img
+                                                                    src={country.flag}
                                                                     alt={country.countryName}
                                                                     style={{
                                                                         width: '24px',
@@ -1119,8 +1123,8 @@ const ICCR = () => {
                                             <Form.Group>
                                                 <Form.Label style={{ fontWeight: '500', color: '#333' }}>Gender</Form.Label>
                                                 <Dropdown>
-                                                    <Dropdown.Toggle 
-                                                        variant="light" 
+                                                    <Dropdown.Toggle
+                                                        variant="light"
                                                         style={{
                                                             width: '100%',
                                                             padding: '0.8rem',
@@ -1133,7 +1137,7 @@ const ICCR = () => {
                                                         {selectedGender || 'Select Gender'}
                                                     </Dropdown.Toggle>
 
-                                                    <Dropdown.Menu style={{ 
+                                                    <Dropdown.Menu style={{
                                                         width: '100%',
                                                         maxHeight: '300px',
                                                         overflowY: 'auto'
@@ -1149,8 +1153,8 @@ const ICCR = () => {
                                                             'Other',
                                                             'Prefer not to say'
                                                         ].map((gender, index) => (
-                                                            <Dropdown.Item 
-                                                                key={index} 
+                                                            <Dropdown.Item
+                                                                key={index}
                                                                 onClick={() => setSelectedGender(gender)}
                                                             >
                                                                 {gender}
@@ -1164,8 +1168,8 @@ const ICCR = () => {
                                             <Form.Group>
                                                 <Form.Label style={{ fontWeight: '500', color: '#333' }}>Last Qualification</Form.Label>
                                                 <Dropdown>
-                                                    <Dropdown.Toggle 
-                                                        variant="light" 
+                                                    <Dropdown.Toggle
+                                                        variant="light"
                                                         style={{
                                                             width: '100%',
                                                             padding: '0.8rem',
@@ -1178,7 +1182,7 @@ const ICCR = () => {
                                                         {selectedQualification || 'Select Qualification'}
                                                     </Dropdown.Toggle>
 
-                                                    <Dropdown.Menu style={{ 
+                                                    <Dropdown.Menu style={{
                                                         width: '100%',
                                                         maxHeight: '300px',
                                                         overflowY: 'auto'
@@ -1189,8 +1193,8 @@ const ICCR = () => {
                                                             'Master\'s Degree',
                                                             'Ph.D.'
                                                         ].map((qualification, index) => (
-                                                            <Dropdown.Item 
-                                                                key={index} 
+                                                            <Dropdown.Item
+                                                                key={index}
                                                                 onClick={() => setSelectedQualification(qualification)}
                                                             >
                                                                 {qualification}
@@ -1204,8 +1208,8 @@ const ICCR = () => {
                                             <Form.Group>
                                                 <Form.Label style={{ fontWeight: '500', color: '#333' }}>Course Interested In</Form.Label>
                                                 <Dropdown>
-                                                    <Dropdown.Toggle 
-                                                        variant="light" 
+                                                    <Dropdown.Toggle
+                                                        variant="light"
                                                         style={{
                                                             width: '100%',
                                                             padding: '0.8rem',
@@ -1218,7 +1222,7 @@ const ICCR = () => {
                                                         {selectedCourse || 'Select Course'}
                                                     </Dropdown.Toggle>
 
-                                                    <Dropdown.Menu style={{ 
+                                                    <Dropdown.Menu style={{
                                                         width: '100%',
                                                         maxHeight: '300px',
                                                         overflowY: 'auto'
@@ -1231,8 +1235,8 @@ const ICCR = () => {
                                                             'Pharmacy',
                                                             'Tourism'
                                                         ].map((course, index) => (
-                                                            <Dropdown.Item 
-                                                                key={index} 
+                                                            <Dropdown.Item
+                                                                key={index}
                                                                 onClick={() => setSelectedCourse(course)}
                                                             >
                                                                 {course}
@@ -1246,8 +1250,8 @@ const ICCR = () => {
                                         {/* Error and Success Messages */}
                                         {error && (
                                             <Col md={12}>
-                                                <Alert 
-                                                    variant="danger" 
+                                                <Alert
+                                                    variant="danger"
                                                     className="mt-3"
                                                     style={{
                                                         fontSize: '1rem',
