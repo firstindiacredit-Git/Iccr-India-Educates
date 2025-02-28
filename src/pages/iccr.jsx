@@ -23,7 +23,7 @@ const ICCR = () => {
     const [formData, setFormData] = useState({
         fullName: '',
         countryCode: '',
-        phoneNumber: '',
+        mobileNumber: '',
         email: '',
         dateOfBirth: '',
         gender: '',
@@ -41,7 +41,7 @@ const ICCR = () => {
     // Add initialFormData constant
     const initialFormData = {
         fullName: '',
-        phoneNumber: '',
+        mobileNumber: '',
         email: '',
         dateOfBirth: '',
     };
@@ -64,7 +64,7 @@ const ICCR = () => {
             const formPayload = {
                 fullName: formData.fullName,
                 countryCode: selectedCountry ? selectedCountry.split(' ')[0] : '',
-                phoneNumber: formData.phoneNumber,
+                mobileNumber: formData.mobileNumber,
                 email: formData.email,
                 dateOfBirth: formData.dateOfBirth,
                 gender: selectedGender,
@@ -73,6 +73,8 @@ const ICCR = () => {
             };
 
             const response = await axios.post('https://crm.indiaeducates.org/api/form1', formPayload);
+            // const response = await axios.post('http://localhost:5000/api/form1', formPayload);
+
 
             if (response.data.success) {
                 setSuccess(true);
@@ -1207,8 +1209,8 @@ const ICCR = () => {
                                                 <Form.Label style={{ fontWeight: '500', color: '#333' }}>Phone Number</Form.Label>
                                                 <Form.Control
                                                     type="tel"
-                                                    name="phoneNumber"
-                                                    value={formData.phoneNumber}
+                                                    name="mobileNumber"
+                                                    value={formData.mobileNumber}
                                                     onChange={handleInputChange}
                                                     placeholder="Enter phone number"
                                                     required
