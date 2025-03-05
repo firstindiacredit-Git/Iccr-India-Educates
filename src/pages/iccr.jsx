@@ -715,7 +715,7 @@ const ICCR = () => {
                             <Row className="g-0">
                                 <Col md={4}>
                                     <img
-                                        src="/images/eligibility.jpg"
+                                        src="/images/eligibility.jpeg"
                                         alt="Eligibility"
                                         className="img-fluid h-100"
                                         style={{
