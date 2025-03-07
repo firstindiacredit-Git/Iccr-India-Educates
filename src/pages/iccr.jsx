@@ -15,7 +15,29 @@ import {
 import axios from 'axios';
 import countryData from '../components/country.json';
 
+// Add CSS for blinking animation
+const blinkingAnimationStyle = `
+@keyframes blinkColors {
+    0% { background-color: #ff5722; transform: scale(1); }
+    25% { background-color: #28a745; transform: scale(1.05); }
+    50% { background-color: #ff5722; transform: scale(1); }
+    75% { background-color: #28a745; transform: scale(1.05); }
+    100% { background-color: #ff5722; transform: scale(1); }
+}
+`;
+
 const ICCR = () => {
+    // Add the style element to the component
+    React.useEffect(() => {
+        const styleElement = document.createElement('style');
+        styleElement.innerHTML = blinkingAnimationStyle;
+        document.head.appendChild(styleElement);
+        
+        return () => {
+            document.head.removeChild(styleElement);
+        };
+    }, []);
+
     const [selectedCountry, setSelectedCountry] = useState('');
     const [selectedGender, setSelectedGender] = useState('');
     const [selectedQualification, setSelectedQualification] = useState('');
@@ -231,27 +253,30 @@ const ICCR = () => {
                         </Col>
                         <Col xs={12} md={2} className="d-flex align-items-center justify-content-center">
                             <Button
-                                className="px-4 py-2 d-flex align-items-center"
+                                className="px-4 py-2 d-flex align-items-center apply-now-button"
                                 style={{
                                     backgroundColor: '#ff5722',
                                     border: 'none',
                                     borderRadius: '50px',
                                     fontSize: 'clamp(0.875rem, 2vw, 15px)',
                                     fontWeight: '600',
-                                    boxShadow: '0 4px 12px rgba(255,87,34,0.3)',
+                                    boxShadow: 'none',
                                     transition: 'all 0.3s ease',
-                                    width: 'fit-content'
+                                    width: 'fit-content',
+                                    animation: 'blinkColors 1.5s infinite'
                                 }}
                                 onClick={scrollToApplicationForm}
                                 onMouseOver={(e) => {
                                     e.currentTarget.style.transform = 'translateY(-2px)';
-                                    e.currentTarget.style.boxShadow = '0 6px 15px rgba(40,167,69,0.4)';
+                                    e.currentTarget.style.boxShadow = 'none';
                                     e.currentTarget.style.backgroundColor = '#28a745';
+                                    e.currentTarget.style.animation = 'none';
                                 }}
                                 onMouseOut={(e) => {
                                     e.currentTarget.style.transform = 'translateY(0)';
-                                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(255,87,34,0.3)';
+                                    e.currentTarget.style.boxShadow = 'none';
                                     e.currentTarget.style.backgroundColor = '#ff5722';
+                                    e.currentTarget.style.animation = 'blinkColors 1.5s infinite';
                                 }}
                             >
                                 <span className="me-2">APPLY NOW</span>
@@ -362,20 +387,23 @@ const ICCR = () => {
                                                         borderRadius: '50px',
                                                         fontSize: '1.2rem',
                                                         fontWeight: '600',
-                                                        boxShadow: '0 4px 12px rgba(255,87,34,0.3)',
+                                                        boxShadow: 'none',
                                                         transition: 'all 0.3s ease',
-                                                        width: 'fit-content'
+                                                        width: 'fit-content',
+                                                        animation: 'blinkColors 1.5s infinite'
                                                     }}
                                                     onClick={scrollToApplicationForm}
                                                     onMouseOver={(e) => {
                                                         e.currentTarget.style.transform = 'translateY(-2px)';
-                                                        e.currentTarget.style.boxShadow = '0 6px 15px rgba(40,167,69,0.4)';
+                                                        e.currentTarget.style.boxShadow = 'none';
                                                         e.currentTarget.style.backgroundColor = '#28a745';
+                                                        e.currentTarget.style.animation = 'none';
                                                     }}
                                                     onMouseOut={(e) => {
                                                         e.currentTarget.style.transform = 'translateY(0)';
-                                                        e.currentTarget.style.boxShadow = '0 4px 12px rgba(255,87,34,0.3)';
+                                                        e.currentTarget.style.boxShadow = 'none';
                                                         e.currentTarget.style.backgroundColor = '#ff5722';
+                                                        e.currentTarget.style.animation = 'blinkColors 1.5s infinite';
                                                     }}
                                                 >
                                                     <span className="me-2">APPLY NOW</span>
@@ -527,17 +555,20 @@ const ICCR = () => {
                                                 borderRadius: '50px',
                                                 fontSize: '1.1rem',
                                                 fontWeight: '600',
-                                                boxShadow: '0 4px 12px rgba(255,87,34,0.3)',
-                                                transition: 'all 0.3s ease'
+                                                boxShadow: 'none',
+                                                transition: 'all 0.3s ease',
+                                                animation: 'blinkColors 1.5s infinite'
                                             }}
                                             onClick={scrollToApplicationForm}
                                             onMouseOver={(e) => {
                                                 e.currentTarget.style.backgroundColor = '#28a745';
-                                                e.currentTarget.style.boxShadow = '0 6px 15px rgba(40,167,69,0.4)';
+                                                e.currentTarget.style.boxShadow = 'none';
+                                                e.currentTarget.style.animation = 'none';
                                             }}
                                             onMouseOut={(e) => {
                                                 e.currentTarget.style.backgroundColor = '#ff5722';
-                                                e.currentTarget.style.boxShadow = '0 4px 12px rgba(255,87,34,0.3)';
+                                                e.currentTarget.style.boxShadow = 'none';
+                                                e.currentTarget.style.animation = 'blinkColors 1.5s infinite';
                                             }}
                                         >
                                             APPLY NOW
@@ -1431,24 +1462,27 @@ const ICCR = () => {
                                                     border: 'none',
                                                     borderRadius: '50px',
                                                     fontWeight: '600',
-                                                    boxShadow: '0 4px 12px rgba(255,87,34,0.3)',
+                                                    boxShadow: 'none',
                                                     transition: 'all 0.3s ease',
                                                     minWidth: '250px',
                                                     position: 'relative',
-                                                    overflow: 'hidden'
+                                                    overflow: 'hidden',
+                                                    animation: loading ? 'none' : 'blinkColors 1.5s infinite'
                                                 }}
                                                 onMouseOver={(e) => {
                                                     if (!loading) {
                                                         e.currentTarget.style.transform = 'translateY(-2px)';
-                                                        e.currentTarget.style.boxShadow = '0 6px 15px rgba(40,167,69,0.4)';
+                                                        e.currentTarget.style.boxShadow = 'none';
                                                         e.currentTarget.style.backgroundColor = '#28a745';
+                                                        e.currentTarget.style.animation = 'none';
                                                     }
                                                 }}
                                                 onMouseOut={(e) => {
                                                     if (!loading) {
                                                         e.currentTarget.style.transform = 'translateY(0)';
-                                                        e.currentTarget.style.boxShadow = '0 4px 12px rgba(255,87,34,0.3)';
+                                                        e.currentTarget.style.boxShadow = 'none';
                                                         e.currentTarget.style.backgroundColor = '#ff5722';
+                                                        e.currentTarget.style.animation = 'blinkColors 1.5s infinite';
                                                     }
                                                 }}
                                             >
