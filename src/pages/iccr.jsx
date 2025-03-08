@@ -32,7 +32,7 @@ const ICCR = () => {
         const styleElement = document.createElement('style');
         styleElement.innerHTML = blinkingAnimationStyle;
         document.head.appendChild(styleElement);
-        
+
         return () => {
             document.head.removeChild(styleElement);
         };
@@ -60,6 +60,9 @@ const ICCR = () => {
     // Add this state for modal
     const [showSuccessModal, setShowSuccessModal] = useState(false);
 
+    // Add this state for popup form
+    const [showPopupForm, setShowPopupForm] = useState(false);
+
     // Add initialFormData constant
     const initialFormData = {
         fullName: '',
@@ -67,6 +70,31 @@ const ICCR = () => {
         email: '',
         dateOfBirth: '',
     };
+
+    // Add useEffect for popup timing
+    React.useEffect(() => {
+        // Show popup initially after 10 seconds
+        const initialTimer = setTimeout(() => {
+            setShowPopupForm(true);
+        }, 10000);
+
+        return () => clearTimeout(initialTimer);
+    }, []);
+
+    // Add useEffect to handle popup reappearing
+    React.useEffect(() => {
+        let popupTimer;
+
+        if (!showPopupForm) {
+            popupTimer = setTimeout(() => {
+                setShowPopupForm(true);
+            }, 10000);
+        }
+
+        return () => {
+            if (popupTimer) clearTimeout(popupTimer);
+        };
+    }, [showPopupForm]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -119,6 +147,49 @@ const ICCR = () => {
             const errorElement = document.querySelector('.alert-danger');
             if (errorElement) {
                 errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Add this function to handle popup form submission
+    const handlePopupSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setError(null);
+        setSuccess(false);
+
+        try {
+            const formPayload = {
+                fullName: formData.fullName,
+                countryCode: selectedCountry ? selectedCountry.split(' ')[0] : '',
+                mobileNumber: formData.mobileNumber,
+                email: formData.email,
+                dateOfBirth: formData.dateOfBirth,
+                gender: selectedGender,
+                lastQualification: selectedQualification,
+                course: selectedCourse
+            };
+
+            const response = await axios.post('https://crm.indiaeducates.org/api/form1', formPayload);
+
+            if (response.data.success) {
+                setSuccess(true);
+                setShowSuccessModal(true); // Show modal on success
+                setShowPopupForm(false); // Hide popup form
+                // Reset form
+                setFormData(initialFormData);
+                setSelectedCountry('');
+                setSelectedGender('');
+                setSelectedQualification('');
+                setSelectedCourse('');
+            }
+        } catch (err) {
+            if (err.response?.status === 400) {
+                setError('You have already submitted an application with this email or phone number. Please use different contact details.');
+            } else {
+                setError(err.response?.data?.message || 'Something went wrong!');
             }
         } finally {
             setLoading(false);
@@ -183,6 +254,352 @@ const ICCR = () => {
                         Close
                     </Button>
                 </div>
+            </Modal.Body>
+        </Modal>
+    );
+
+    // Add Popup Form Component
+    const PopupFormModal = () => (
+        <Modal
+            show={showPopupForm}
+            centered
+            size="lg"
+            onHide={() => setShowPopupForm(false)}
+            backdrop="static"
+        >
+            <Modal.Header closeButton style={{ border: 'none', paddingBottom: 0 }}>
+                <Modal.Title className="w-100 text-center">
+                    <h3 style={{ color: '#ff5722', fontWeight: '700' }}>ICCR SCHOLARSHIP APPLICATION</h3>
+                </Modal.Title>
+            </Modal.Header>
+            <Modal.Body className="p-3">
+                <div className="text-center">
+                    <h5 className="">Apply Now for Fully Funded Scholarship Program</h5>
+                    <p className="text-muted">
+                        Fill out the form below to start your journey to study in India with a monthly stipend of 250-300 US Dollars.
+                    </p>
+                </div>
+
+                <Form onSubmit={handlePopupSubmit}>
+                    <Row className="g-2 px-3">
+                        <Col md={12}>
+                            <Form.Group>
+                                <Form.Label style={{ fontWeight: '500', color: '#333', fontSize: '0.9rem', marginBottom: '0.2rem' }}>Full Name</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    name="fullName"
+                                    value={formData.fullName}
+                                    onChange={handleInputChange}
+                                    placeholder="Enter your full name"
+                                    required
+                                    style={{
+                                        padding: '0.5rem',
+                                        borderRadius: '8px',
+                                        border: '1px solid #ced4da',
+                                        boxShadow: 'none',
+                                        fontSize: '0.9rem'
+                                    }}
+                                />
+                            </Form.Group>
+                        </Col>
+                        <Col md={6}>
+                            <Form.Group>
+                                <Form.Label style={{ fontWeight: '500', color: '#333', fontSize: '0.9rem', marginBottom: '0.2rem' }}>Country Code</Form.Label>
+                                <Dropdown>
+                                    <Dropdown.Toggle
+                                        variant="light"
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.5rem',
+                                            borderRadius: '8px',
+                                            border: '1px solid #ced4da',
+                                            backgroundColor: '#fff',
+                                            textAlign: 'left',
+                                            fontSize: '0.9rem'
+                                        }}
+                                    >
+                                        {selectedCountry || 'Select Country Code'}
+                                    </Dropdown.Toggle>
+
+                                    <Dropdown.Menu style={{
+                                        width: '100%',
+                                        maxHeight: '150px',
+                                        overflowY: 'auto'
+                                    }}>
+                                        {countryData.countries.map((country, index) => (
+                                            <Dropdown.Item
+                                                key={index}
+                                                onClick={() => setSelectedCountry(`${country.callingCode} (${country.countryName})`)}
+                                                className="d-flex align-items-center gap-2"
+                                                style={{ fontSize: '0.9rem' }}
+                                            >
+                                                <img
+                                                    src={country.flag}
+                                                    alt={country.countryName}
+                                                    style={{
+                                                        width: '20px',
+                                                        height: '15px',
+                                                        objectFit: 'cover'
+                                                    }}
+                                                />
+                                                <span>{country.callingCode}</span>
+                                                <span>({country.countryName})</span>
+                                            </Dropdown.Item>
+                                        ))}
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            </Form.Group>
+                        </Col>
+                        <Col md={6}>
+                            <Form.Group>
+                                <Form.Label style={{ fontWeight: '500', color: '#333', fontSize: '0.9rem', marginBottom: '0.2rem' }}>Phone Number</Form.Label>
+                                <Form.Control
+                                    type="tel"
+                                    name="mobileNumber"
+                                    value={formData.mobileNumber}
+                                    onChange={handleInputChange}
+                                    placeholder="Enter phone number"
+                                    required
+                                    style={{
+                                        padding: '0.5rem',
+                                        borderRadius: '8px',
+                                        border: '1px solid #ced4da',
+                                        boxShadow: 'none',
+                                        fontSize: '0.9rem'
+                                    }}
+                                />
+                            </Form.Group>
+                        </Col>
+                        <Col md={12}>
+                            <Form.Group>
+                                <Form.Label style={{ fontWeight: '500', color: '#333', fontSize: '0.9rem', marginBottom: '0.2rem' }}>Email Address</Form.Label>
+                                <Form.Control
+                                    type="email"
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={handleInputChange}
+                                    placeholder="Enter your email"
+                                    required
+                                    style={{
+                                        padding: '0.5rem',
+                                        borderRadius: '8px',
+                                        border: '1px solid #ced4da',
+                                        boxShadow: 'none',
+                                        fontSize: '0.9rem'
+                                    }}
+                                />
+                            </Form.Group>
+                        </Col>
+                        <Col md={6}>
+                            <Form.Group>
+                                <Form.Label style={{ fontWeight: '500', color: '#333', fontSize: '0.9rem', marginBottom: '0.2rem' }}>Date of Birth</Form.Label>
+                                <Form.Control
+                                    type="date"
+                                    name="dateOfBirth"
+                                    value={formData.dateOfBirth}
+                                    onChange={handleInputChange}
+                                    required
+                                    style={{
+                                        padding: '0.5rem',
+                                        borderRadius: '8px',
+                                        border: '1px solid #ced4da',
+                                        boxShadow: 'none',
+                                        fontSize: '0.9rem'
+                                    }}
+                                />
+                            </Form.Group>
+                        </Col>
+                        <Col md={6}>
+                            <Form.Group>
+                                <Form.Label style={{ fontWeight: '500', color: '#333', fontSize: '0.9rem', marginBottom: '0.2rem' }}>Gender</Form.Label>
+                                <Dropdown>
+                                    <Dropdown.Toggle
+                                        variant="light"
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.5rem',
+                                            borderRadius: '8px',
+                                            border: '1px solid #ced4da',
+                                            backgroundColor: '#fff',
+                                            textAlign: 'left',
+                                            fontSize: '0.9rem'
+                                        }}
+                                    >
+                                        {selectedGender || 'Select Gender'}
+                                    </Dropdown.Toggle>
+
+                                    <Dropdown.Menu style={{
+                                        width: '100%',
+                                        maxHeight: '150px',
+                                        overflowY: 'auto'
+                                    }}>
+                                        {[
+                                            'Male',
+                                            'Female',
+                                            'Transgender',
+                                            'Non-binary',
+                                            'Gender Fluid',
+                                            'Agender',
+                                            'Bigender',
+                                            'Other',
+                                            'Prefer not to say'
+                                        ].map((gender, index) => (
+                                            <Dropdown.Item
+                                                key={index}
+                                                onClick={() => setSelectedGender(gender)}
+                                                style={{ fontSize: '0.9rem' }}
+                                            >
+                                                {gender}
+                                            </Dropdown.Item>
+                                        ))}
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            </Form.Group>
+                        </Col>
+                        <Col md={6}>
+                            <Form.Group>
+                                <Form.Label style={{ fontWeight: '500', color: '#333', fontSize: '0.9rem', marginBottom: '0.2rem' }}>Last Qualification</Form.Label>
+                                <Dropdown>
+                                    <Dropdown.Toggle
+                                        variant="light"
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.5rem',
+                                            borderRadius: '8px',
+                                            border: '1px solid #ced4da',
+                                            backgroundColor: '#fff',
+                                            textAlign: 'left',
+                                            fontSize: '0.9rem'
+                                        }}
+                                    >
+                                        {selectedQualification || 'Select Qualification'}
+                                    </Dropdown.Toggle>
+
+                                    <Dropdown.Menu style={{
+                                        width: '100%',
+                                        maxHeight: '150px',
+                                        overflowY: 'auto'
+                                    }}>
+                                        {[
+                                            'High School',
+                                            'Bachelor\'s Degree',
+                                            'Master\'s Degree',
+                                            'Ph.D.'
+                                        ].map((qualification, index) => (
+                                            <Dropdown.Item
+                                                key={index}
+                                                onClick={() => setSelectedQualification(qualification)}
+                                                style={{ fontSize: '0.9rem' }}
+                                            >
+                                                {qualification}
+                                            </Dropdown.Item>
+                                        ))}
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            </Form.Group>
+                        </Col>
+                        <Col md={6}>
+                            <Form.Group>
+                                <Form.Label style={{ fontWeight: '500', color: '#333', fontSize: '0.9rem', marginBottom: '0.2rem' }}>Course Interested In</Form.Label>
+                                <Dropdown>
+                                    <Dropdown.Toggle
+                                        variant="light"
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.5rem',
+                                            borderRadius: '8px',
+                                            border: '1px solid #ced4da',
+                                            backgroundColor: '#fff',
+                                            textAlign: 'left',
+                                            fontSize: '0.9rem'
+                                        }}
+                                    >
+                                        {selectedCourse || 'Select Course'}
+                                    </Dropdown.Toggle>
+
+                                    <Dropdown.Menu style={{
+                                        width: '100%',
+                                        maxHeight: '150px',
+                                        overflowY: 'auto'
+                                    }}>
+                                        {[
+                                            'Engineering',
+                                            'Management',
+                                            'Agriculture',
+                                            'Computer Science',
+                                            'Pharmacy',
+                                            'Tourism'
+                                        ].map((course, index) => (
+                                            <Dropdown.Item
+                                                key={index}
+                                                onClick={() => setSelectedCourse(course)}
+                                                style={{ fontSize: '0.9rem' }}
+                                            >
+                                                {course}
+                                            </Dropdown.Item>
+                                        ))}
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            </Form.Group>
+                        </Col>
+
+                        {/* Error Message */}
+                        {error && (
+                            <Col md={12}>
+                                <Alert
+                                    variant="danger"
+                                    className="mt-2 p-2"
+                                    style={{
+                                        fontSize: '0.8rem',
+                                        borderRadius: '8px'
+                                    }}
+                                >
+                                    {error}
+                                </Alert>
+                            </Col>
+                        )}
+
+                        {/* Submit Button */}
+                        <Col md={12} className="text-center mt-4">
+                            <Button
+                                type="submit"
+                                size="sm"
+                                disabled={loading}
+                                className="px-5 py-3 d-flex align-items-center justify-content-center mx-auto"
+                                style={{
+                                    backgroundColor: '#ff5722',
+                                    border: 'none',
+                                    borderRadius: '50px',
+                                    fontWeight: '600',
+                                    boxShadow: '0 4px 12px rgba(255,87,34,0.3)',
+                                    transition: 'all 0.3s ease',
+                                    minWidth: '250px',
+                                    position: 'relative',
+                                    overflow: 'hidden',
+                                }}
+                                onMouseOver={(e) => {
+                                    if (!loading) {
+                                        e.currentTarget.style.transform = 'translateY(-2px)';
+                                        e.currentTarget.style.boxShadow = '0 6px 15px rgba(40,167,69,0.4)';
+                                        e.currentTarget.style.backgroundColor = '#28a745';
+                                    }
+                                }}
+                                onMouseOut={(e) => {
+                                    if (!loading) {
+                                        e.currentTarget.style.transform = 'translateY(0)';
+                                        e.currentTarget.style.boxShadow = '0 4px 12px rgba(255,87,34,0.3)';
+                                        e.currentTarget.style.backgroundColor = '#ff5722';
+                                    }
+                                }}
+                            >
+                                <span className="me-2">
+                                    {loading ? 'Submitting...' : 'Submit Application'}
+                                </span>
+                                {!loading && <i className="bi bi-arrow-right"></i>}
+                            </Button>
+                        </Col>
+                    </Row>
+                </Form>
             </Modal.Body>
         </Modal>
     );
@@ -1462,27 +1879,24 @@ const ICCR = () => {
                                                     border: 'none',
                                                     borderRadius: '50px',
                                                     fontWeight: '600',
-                                                    boxShadow: 'none',
+                                                    boxShadow: '0 4px 12px rgba(255,87,34,0.3)',
                                                     transition: 'all 0.3s ease',
                                                     minWidth: '250px',
                                                     position: 'relative',
-                                                    overflow: 'hidden',
-                                                    animation: loading ? 'none' : 'blinkColors 1.5s infinite'
+                                                    overflow: 'hidden'
                                                 }}
                                                 onMouseOver={(e) => {
                                                     if (!loading) {
                                                         e.currentTarget.style.transform = 'translateY(-2px)';
-                                                        e.currentTarget.style.boxShadow = 'none';
+                                                        e.currentTarget.style.boxShadow = '0 6px 15px rgba(40,167,69,0.4)';
                                                         e.currentTarget.style.backgroundColor = '#28a745';
-                                                        e.currentTarget.style.animation = 'none';
                                                     }
                                                 }}
                                                 onMouseOut={(e) => {
                                                     if (!loading) {
                                                         e.currentTarget.style.transform = 'translateY(0)';
-                                                        e.currentTarget.style.boxShadow = 'none';
+                                                        e.currentTarget.style.boxShadow = '0 4px 12px rgba(255,87,34,0.3)';
                                                         e.currentTarget.style.backgroundColor = '#ff5722';
-                                                        e.currentTarget.style.animation = 'blinkColors 1.5s infinite';
                                                     }
                                                 }}
                                             >
@@ -1580,6 +1994,7 @@ const ICCR = () => {
 
             {/* Add SuccessModal component before the closing tag */}
             <SuccessModal />
+            <PopupFormModal />
         </>
     );
 };
