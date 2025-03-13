@@ -1652,13 +1652,14 @@ const ICCR = () => {
                         justifyContent: 'center',
                         alignItems: 'center',
                         zIndex: 9999,
+                        padding: '10px' // Added padding for mobile
                     }}
                 >
                     <div
                         style={{
                             backgroundColor: 'white',
                             borderRadius: '15px',
-                            width: '90%',
+                            width: '100%', // Changed to 100% for mobile
                             maxWidth: '800px',
                             height: 'auto',
                             maxHeight: '90vh',
@@ -1666,6 +1667,7 @@ const ICCR = () => {
                             boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
                             display: 'flex',
                             flexDirection: 'column',
+                            overflowY: 'auto' // Added scroll for mobile
                         }}
                     >
                         {/* Close button */}
@@ -1673,32 +1675,51 @@ const ICCR = () => {
                             onClick={closeCustomPopup}
                             style={{
                                 position: 'absolute',
-                                top: '15px',
-                                right: '15px',
-                                background: 'none',
+                                top: '10px',
+                                right: '10px',
+                                background: 'rgba(255, 255, 255, 0.8)',
                                 border: 'none',
-                                fontSize: '24px',
+                                borderRadius: '50%',
+                                width: '30px',
+                                height: '30px',
+                                fontSize: '20px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
                                 cursor: 'pointer',
-                                zIndex: 1,
+                                zIndex: 2,
+                                boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
                             }}
                         >
                             ×
                         </button>
 
-                        {/* Popup content container with fixed height and no scroll */}
-                        <div style={{ padding: '20px', height: '100%', overflow: 'hidden' }}>
+                        {/* Popup content container with scroll for mobile */}
+                        <div style={{ 
+                            padding: '15px', 
+                            height: '100%', 
+                            overflowY: 'auto',
+                            WebkitOverflowScrolling: 'touch' // For smooth scrolling on iOS
+                        }}>
                             {/* Popup header */}
-                            <div style={{ textAlign: 'center', marginBottom: '15px' }}>
-                                <h3 style={{ color: '#ff5722', fontWeight: '700' }}>ICCR SCHOLARSHIP APPLICATION</h3>
-                                <h5>Apply Now for Fully Funded Scholarship Program</h5>
-                                <p style={{ color: '#6c757d' }}>
+                            <div style={{ textAlign: 'center', marginBottom: '15px', paddingTop: '10px' }}>
+                                <h3 style={{ 
+                                    color: '#ff5722', 
+                                    fontWeight: '700',
+                                    fontSize: 'clamp(1.2rem, 5vw, 1.5rem)' // Responsive font size
+                                }}>ICCR SCHOLARSHIP APPLICATION</h3>
+                                <h5 style={{ fontSize: 'clamp(1rem, 4vw, 1.25rem)' }}>Apply Now for Fully Funded Scholarship</h5>
+                                <p style={{ 
+                                    color: '#6c757d',
+                                    fontSize: 'clamp(0.8rem, 3vw, 1rem)'
+                                }}>
                                     Fill out the form to start your journey to study in India with a monthly stipend of 250-300 US Dollars.
                                 </p>
                             </div>
 
                             <Form onSubmit={handleSubmit}>
-                                <Row className="g-2 px-3">
-                                    <Col md={12}>
+                                <Row className="g-2">
+                                    <Col xs={12}>
                                         <Form.Group>
                                             <Form.Label style={{ fontWeight: '500', color: '#333', fontSize: '0.9rem', marginBottom: '0.2rem' }}>Full Name</Form.Label>
                                             <Form.Control
@@ -1718,7 +1739,7 @@ const ICCR = () => {
                                             />
                                         </Form.Group>
                                     </Col>
-                                    <Col md={6}>
+                                    <Col xs={5}>
                                         <Form.Group>
                                             <Form.Label style={{ fontWeight: '500', color: '#333', fontSize: '0.9rem', marginBottom: '0.2rem' }}>Country Code</Form.Label>
                                             <Dropdown>
@@ -1734,7 +1755,7 @@ const ICCR = () => {
                                                         fontSize: '0.9rem'
                                                     }}
                                                 >
-                                                    {selectedCountry || 'Select Country Code'}
+                                                    {selectedCountry || 'Select'}
                                                 </Dropdown.Toggle>
 
                                                 <Dropdown.Menu style={{
@@ -1745,7 +1766,7 @@ const ICCR = () => {
                                                     {countryData.countries.map((country, index) => (
                                                         <Dropdown.Item
                                                             key={index}
-                                                            onClick={() => setSelectedCountry(`${country.callingCode} (${country.countryName})`)}
+                                                            onClick={() => handleCountrySelect(`${country.callingCode} (${country.countryName})`)}
                                                             className="d-flex align-items-center gap-2"
                                                             style={{ fontSize: '0.9rem' }}
                                                         >
@@ -1759,14 +1780,13 @@ const ICCR = () => {
                                                                 }}
                                                             />
                                                             <span>{country.callingCode}</span>
-                                                            <span>({country.countryName})</span>
                                                         </Dropdown.Item>
                                                     ))}
                                                 </Dropdown.Menu>
                                             </Dropdown>
                                         </Form.Group>
                                     </Col>
-                                    <Col md={6}>
+                                    <Col xs={7}>
                                         <Form.Group>
                                             <Form.Label style={{ fontWeight: '500', color: '#333', fontSize: '0.9rem', marginBottom: '0.2rem' }}>Phone Number</Form.Label>
                                             <Form.Control
@@ -1786,7 +1806,7 @@ const ICCR = () => {
                                             />
                                         </Form.Group>
                                     </Col>
-                                    <Col md={12}>
+                                    <Col xs={12}>
                                         <Form.Group>
                                             <Form.Label style={{ fontWeight: '500', color: '#333', fontSize: '0.9rem', marginBottom: '0.2rem' }}>Email Address</Form.Label>
                                             <Form.Control
@@ -1806,7 +1826,7 @@ const ICCR = () => {
                                             />
                                         </Form.Group>
                                     </Col>
-                                    <Col md={6}>
+                                    <Col xs={6}>
                                         <Form.Group>
                                             <Form.Label style={{ fontWeight: '500', color: '#333', fontSize: '0.9rem', marginBottom: '0.2rem' }}>Date of Birth</Form.Label>
                                             <Form.Control
@@ -1825,7 +1845,7 @@ const ICCR = () => {
                                             />
                                         </Form.Group>
                                     </Col>
-                                    <Col md={6}>
+                                    <Col xs={6}>
                                         <Form.Group>
                                             <Form.Label style={{ fontWeight: '500', color: '#333', fontSize: '0.9rem', marginBottom: '0.2rem' }}>Gender</Form.Label>
                                             <Dropdown>
@@ -1841,7 +1861,7 @@ const ICCR = () => {
                                                         fontSize: '0.9rem'
                                                     }}
                                                 >
-                                                    {selectedGender || 'Select Gender'}
+                                                    {selectedGender || 'Select'}
                                                 </Dropdown.Toggle>
 
                                                 <Dropdown.Menu style={{
@@ -1862,7 +1882,7 @@ const ICCR = () => {
                                                     ].map((gender, index) => (
                                                         <Dropdown.Item
                                                             key={index}
-                                                            onClick={() => setSelectedGender(gender)}
+                                                            onClick={() => handleGenderSelect(gender)}
                                                             style={{ fontSize: '0.9rem' }}
                                                         >
                                                             {gender}
@@ -1872,7 +1892,7 @@ const ICCR = () => {
                                             </Dropdown>
                                         </Form.Group>
                                     </Col>
-                                    <Col md={6}>
+                                    <Col xs={6}>
                                         <Form.Group>
                                             <Form.Label style={{ fontWeight: '500', color: '#333', fontSize: '0.9rem', marginBottom: '0.2rem' }}>Last Qualification</Form.Label>
                                             <Dropdown>
@@ -1888,7 +1908,7 @@ const ICCR = () => {
                                                         fontSize: '0.9rem'
                                                     }}
                                                 >
-                                                    {selectedQualification || 'Select Qualification'}
+                                                    {selectedQualification || 'Select'}
                                                 </Dropdown.Toggle>
 
                                                 <Dropdown.Menu style={{
@@ -1904,7 +1924,7 @@ const ICCR = () => {
                                                     ].map((qualification, index) => (
                                                         <Dropdown.Item
                                                             key={index}
-                                                            onClick={() => setSelectedQualification(qualification)}
+                                                            onClick={() => handleQualificationSelect(qualification)}
                                                             style={{ fontSize: '0.9rem' }}
                                                         >
                                                             {qualification}
@@ -1914,7 +1934,7 @@ const ICCR = () => {
                                             </Dropdown>
                                         </Form.Group>
                                     </Col>
-                                    <Col md={6}>
+                                    <Col xs={6}>
                                         <Form.Group>
                                             <Form.Label style={{ fontWeight: '500', color: '#333', fontSize: '0.9rem', marginBottom: '0.2rem' }}>Course Interested In</Form.Label>
                                             <Dropdown>
@@ -1930,7 +1950,7 @@ const ICCR = () => {
                                                         fontSize: '0.9rem'
                                                     }}
                                                 >
-                                                    {selectedCourse || 'Select Course'}
+                                                    {selectedCourse || 'Select'}
                                                 </Dropdown.Toggle>
 
                                                 <Dropdown.Menu style={{
@@ -1948,7 +1968,7 @@ const ICCR = () => {
                                                     ].map((course, index) => (
                                                         <Dropdown.Item
                                                             key={index}
-                                                            onClick={() => setSelectedCourse(course)}
+                                                            onClick={() => handleCourseSelect(course)}
                                                             style={{ fontSize: '0.9rem' }}
                                                         >
                                                             {course}
@@ -1961,7 +1981,7 @@ const ICCR = () => {
 
                                     {/* Error Message */}
                                     {error && (
-                                        <Col md={12}>
+                                        <Col xs={12}>
                                             <Alert
                                                 variant="danger"
                                                 className="mt-2 p-2"
@@ -1976,12 +1996,11 @@ const ICCR = () => {
                                     )}
 
                                     {/* Submit Button */}
-                                    <Col md={12} className="text-center mt-4">
+                                    <Col xs={12} className="text-center mt-3">
                                         <Button
                                             type="submit"
-                                            size="sm"
                                             disabled={loading}
-                                            className="px-5 py-3 d-flex align-items-center justify-content-center mx-auto"
+                                            className="px-4 py-2 d-flex align-items-center justify-content-center mx-auto"
                                             style={{
                                                 backgroundColor: '#ff5722',
                                                 border: 'none',
@@ -1989,21 +2008,19 @@ const ICCR = () => {
                                                 fontWeight: '600',
                                                 boxShadow: '0 4px 12px rgba(255,87,34,0.3)',
                                                 transition: 'all 0.3s ease',
-                                                minWidth: '200px',
+                                                width: '100%',
+                                                maxWidth: '250px',
                                                 position: 'relative',
-                                                overflow: 'hidden'
+                                                overflow: 'hidden',
+                                                fontSize: '0.95rem'
                                             }}
                                             onMouseOver={(e) => {
                                                 if (!loading) {
-                                                    e.currentTarget.style.transform = 'translateY(-2px)';
-                                                    e.currentTarget.style.boxShadow = '0 6px 15px rgba(40,167,69,0.4)';
                                                     e.currentTarget.style.backgroundColor = '#28a745';
                                                 }
                                             }}
                                             onMouseOut={(e) => {
                                                 if (!loading) {
-                                                    e.currentTarget.style.transform = 'translateY(0)';
-                                                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(255,87,34,0.3)';
                                                     e.currentTarget.style.backgroundColor = '#ff5722';
                                                 }
                                             }}
