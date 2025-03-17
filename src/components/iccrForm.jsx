@@ -263,33 +263,30 @@ const iccrForm = () => {
             if (formData.educationalQualifications) {
                 formData.educationalQualifications.forEach((edu, index) => {
                     Object.keys(edu).forEach(key => {
-                        formDataToSend.append(`educationalQualifications[${index}][${key}]`, edu[key]);
+                        formDataToSend.append(`previousEducations[${index}][${key === 'certificate' ? 'degree' : key === 'boardName' ? 'board' : key === 'schoolName' ? 'school' : key}]`, edu[key]);
                     });
                 });
             }
 
             if (formData.universities) {
                 formData.universities.forEach((univ, index) => {
-                    formDataToSend.append(`universities[${index}]`, univ);
-                });
-            }
-
-            if (formData.subjects) {
-                formData.subjects.forEach((subject, index) => {
-                    formDataToSend.append(`subjects[${index}]`, subject);
-                });
-            }
-
-            if (formData.courseStreams) {
-                formData.courseStreams.forEach((stream, index) => {
-                    formDataToSend.append(`courseStreams[${index}]`, stream);
+                    formDataToSend.append(`universityPreferences[${index}][preference]`, index + 1);
+                    formDataToSend.append(`universityPreferences[${index}][university]`, univ);
+                    
+                    if (formData.subjects[index]) {
+                        formDataToSend.append(`universityPreferences[${index}][subject]`, formData.subjects[index]);
+                    }
+                    
+                    if (formData.courseStreams[index]) {
+                        formDataToSend.append(`universityPreferences[${index}][course]`, formData.courseStreams[index]);
+                    }
                 });
             }
 
             if (formData.references) {
                 formData.references.forEach((ref, index) => {
                     Object.keys(ref).forEach(key => {
-                        formDataToSend.append(`references[${index}][${key}]`, ref[key]);
+                        formDataToSend.append(`references[${index}][${key === 'telephone' ? 'phone' : key === 'postalAddress' ? 'address' : key}]`, ref[key]);
                     });
                 });
             }
@@ -297,10 +294,18 @@ const iccrForm = () => {
             if (formData.indianContacts) {
                 formData.indianContacts.forEach((contact, index) => {
                     Object.keys(contact).forEach(key => {
-                        formDataToSend.append(`indianContacts[${index}][${key}]`, contact[key]);
+                        formDataToSend.append(`indianContacts[${index}][${key === 'name' ? 'contactName' : key === 'postalAddress' ? 'address' : key}]`, contact[key]);
                     });
                 });
             }
+
+            // Map form fields to backend model fields
+            formDataToSend.append('tillWhatLevel1', formData.proficiencyLevel || '');
+            formDataToSend.append('score1', formData.proficiencyScore || '');
+            formDataToSend.append('travelledInIndia', formData.travelledToIndia || '');
+            formDataToSend.append('residenceInIndia', formData.indianResident || '');
+            formDataToSend.append('dateOfApplication', formData.declarationDate || '');
+            formDataToSend.append('placeOfApplication', formData.declarationPlace || '');
 
             // Handle file uploads
             if (formData.studentPhoto) {
@@ -314,25 +319,36 @@ const iccrForm = () => {
             }
 
             // Handle document uploads
-            const documentFields = {
-                permanentUniqueId: 'permanentUniqueId',
-                passportCopy: 'passportCopy',
-                gradeXMarksheet: 'gradeXMarksheet',
-                gradeXIIMarksheet: 'gradeXIIMarksheet',
-                medicalFitnessCertificate: 'medicalFitnessCertificate',
-                englishTranslationOfDocuments: 'englishTranslationOfDocuments',
-                englishAsSubjectDocument: 'englishAsSubjectDocument',
-                anyOtherDocument: 'anyOtherDocument'
-            };
-
-            Object.entries(documentFields).forEach(([key, fieldName]) => {
-                if (formData.documents && formData.documents[key]) {
-                    formDataToSend.append(fieldName, formData.documents[key]);
+            if (formData.documents) {
+                if (formData.documents.permanentUniqueId) {
+                    formDataToSend.append('permanentUniqueId', formData.documents.permanentUniqueId);
                 }
-            });
+                if (formData.documents.passportCopy) {
+                    formDataToSend.append('passportCopy', formData.documents.passportCopy);
+                }
+                if (formData.documents.gradeXMarksheet) {
+                    formDataToSend.append('gradeXMarksheet', formData.documents.gradeXMarksheet);
+                }
+                if (formData.documents.gradeXIIMarksheet) {
+                    formDataToSend.append('gradeXIIMarksheet', formData.documents.gradeXIIMarksheet);
+                }
+                if (formData.documents.medicalFitnessCertificate) {
+                    formDataToSend.append('medicalFitnessCertificate', formData.documents.medicalFitnessCertificate);
+                }
+                if (formData.documents.englishTranslationOfDocuments) {
+                    formDataToSend.append('englishTranslationOfDocuments', formData.documents.englishTranslationOfDocuments);
+                }
+                if (formData.documents.englishAsSubjectDocument) {
+                    formDataToSend.append('englishAsSubjectDocument', formData.documents.englishAsSubjectDocument);
+                }
+                if (formData.documents.anyOtherDocument) {
+                    formDataToSend.append('anyOtherDocument', formData.documents.anyOtherDocument);
+                }
+            }
 
             const response = await axios.post(
                 `https://crm.indiaeducates.org/api/iccr`,
+                // `http://localhost:5000/api/iccr`,
                 formDataToSend,
                 {
                     headers: {
