@@ -427,14 +427,14 @@ const ICCR = () => {
                                                     fontWeight: '700',
                                                     marginBottom: '10px',
                                                 }}>
-                                                    Get up to <span style={{ color: '#d52637' }}>250-300 US Dollar</span> every month stipend
+                                                    Get up to <span style={{ color: 'yellow', textShadow: '2px 2px 4px rgba(0,0,0,0.3)' }}>250-300 US Dollar</span> every month stipend
                                                 </h3>
                                                 <h4 style={{
                                                     color: 'white',
                                                     fontSize: '1.4rem',
                                                     fontWeight: '600'
                                                 }}>
-                                                    Register now at just <span style={{ color: '#d52637', fontWeight: '700' }}>65$</span>
+                                                    Register now at just <span style={{ color: 'yellow', textShadow: '2px 2px 4px rgba(0,0,0,0.3)', fontWeight: '700' }}>65$</span>
                                                 </h4>
                                             </div>
 
