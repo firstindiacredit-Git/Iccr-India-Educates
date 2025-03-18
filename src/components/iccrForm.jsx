@@ -738,7 +738,7 @@ const iccrForm = () => {
                                                                 onChange={handleChange}
                                                                 required
                                                                 className="py-2"
-                                                                placeholder="JOHN DOE"
+                                                                //="JOHN DOE"
                                                             />
                                                         </Form.Group>
                                                     </Col>
@@ -870,7 +870,7 @@ const iccrForm = () => {
                                                                 onChange={handleChange}
                                                                 required
                                                                 className="py-2"
-                                                                placeholder="City, Country"
+                                                                //="City, Country"
                                                             />
                                                         </Form.Group>
                                                     </Col>
@@ -885,7 +885,7 @@ const iccrForm = () => {
                                                                 onChange={handleChange}
                                                                 required
                                                                 className="py-2"
-                                                                placeholder="+220263765"
+                                                                //="+220263765"
                                                             />
                                                         </Form.Group>
                                                     </Col>
@@ -898,7 +898,7 @@ const iccrForm = () => {
                                                                 value={formData.whatsappNumber}
                                                                 onChange={handleChange}
                                                                 className="py-2"
-                                                                placeholder="+220263765"
+                                                                //="+220263765"
                                                             />
                                                         </Form.Group>
                                                     </Col>
@@ -912,7 +912,7 @@ const iccrForm = () => {
                                                                 onChange={handleChange}
                                                                 required
                                                                 className="py-2"
-                                                                placeholder="example@email.com"
+                                                                //="example@email.com"
                                                             />
                                                         </Form.Group>
                                                     </Col>
@@ -930,7 +930,7 @@ const iccrForm = () => {
                                                                 onChange={handleChange}
                                                                 required
                                                                 className="py-2"
-                                                                placeholder="AB1234567"
+                                                                //="AB1234567"
                                                             />
                                                         </Form.Group>
                                                     </Col>
@@ -944,7 +944,7 @@ const iccrForm = () => {
                                                                 onChange={handleChange}
                                                                 required
                                                                 className="py-2"
-                                                                placeholder="City, Country"
+                                                                //="City, Country"
                                                             />
                                                         </Form.Group>
                                                     </Col>
@@ -988,7 +988,7 @@ const iccrForm = () => {
                                                                 onChange={handleChange}
                                                                 required
                                                                 className="py-2"
-                                                                placeholder="Street Address"
+                                                                //="Street Address"
                                                             />
                                                         </Form.Group>
                                                     </Col>
@@ -1002,7 +1002,7 @@ const iccrForm = () => {
                                                                 onChange={handleChange}
                                                                 required
                                                                 className="py-2"
-                                                                placeholder="City"
+                                                                //="City"
                                                             />
                                                         </Form.Group>
                                                     </Col>
@@ -1016,7 +1016,7 @@ const iccrForm = () => {
                                                                 onChange={handleChange}
                                                                 required
                                                                 className="py-2"
-                                                                placeholder="State"
+                                                                //="State"
                                                             />
                                                         </Form.Group>
                                                     </Col>
@@ -1030,7 +1030,7 @@ const iccrForm = () => {
                                                                 onChange={handleChange}
                                                                 required
                                                                 className="py-2"
-                                                                placeholder="Country"
+                                                                //="Country"
                                                             />
                                                         </Form.Group>
                                                     </Col>
@@ -1044,7 +1044,7 @@ const iccrForm = () => {
                                                                 onChange={handleChange}
                                                                 required
                                                                 className="py-2"
-                                                                placeholder="123456"
+                                                                //="123456"
                                                             />
                                                         </Form.Group>
                                                     </Col>
@@ -1074,7 +1074,7 @@ const iccrForm = () => {
                                                                         onChange={handleChange}
                                                                         required
                                                                         className="py-2"
-                                                                        placeholder="+220263765"
+                                                                        //="+220263765"
                                                                     />
                                                                 </Form.Group>
                                                             </Col>
@@ -1114,7 +1114,7 @@ const iccrForm = () => {
                                                                         onChange={handleChange}
                                                                         required
                                                                         className="py-2"
-                                                                        placeholder="+220263765"
+                                                                        //="+220263765"
                                                                     />
                                                                 </Form.Group>
                                                             </Col>
@@ -1160,7 +1160,7 @@ const iccrForm = () => {
                                                                         name="proficiencyLevel"
                                                                         value={formData.proficiencyLevel}
                                                                         onChange={handleChange}
-                                                                        placeholder="1"
+                                                                        //="1"
                                                                         className="py-2"
                                                                     />
                                                                 </Form.Group>
@@ -1173,7 +1173,7 @@ const iccrForm = () => {
                                                                         name="proficiencyScore"
                                                                         value={formData.proficiencyScore}
                                                                         onChange={handleChange}
-                                                                        placeholder="60"
+                                                                        //="60"
                                                                         className="py-2"
                                                                     />
                                                                 </Form.Group>
@@ -1201,7 +1201,7 @@ const iccrForm = () => {
                                                                         name="toeflScore"
                                                                         value={formData.toeflScore}
                                                                         onChange={handleChange}
-                                                                        placeholder="NA"
+                                                                        //="NA"
                                                                         className="py-2"
                                                                     />
                                                                 </Form.Group>
@@ -1214,7 +1214,7 @@ const iccrForm = () => {
                                                                         name="ieltsScore"
                                                                         value={formData.ieltsScore}
                                                                         onChange={handleChange}
-                                                                        placeholder="NA"
+                                                                        //="NA"
                                                                         className="py-2"
                                                                     />
                                                                 </Form.Group>
@@ -1227,7 +1227,7 @@ const iccrForm = () => {
                                                                         name="duolingoScore"
                                                                         value={formData.duolingoScore}
                                                                         onChange={handleChange}
-                                                                        placeholder="NA"
+                                                                        //="NA"
                                                                         className="py-2"
                                                                     />
                                                                 </Form.Group>
@@ -1257,7 +1257,7 @@ const iccrForm = () => {
                                                                                     type="text"
                                                                                     value={qual.certificate}
                                                                                     onChange={(e) => handleQualificationChange(index, 'certificate', e.target.value)}
-                                                                                    placeholder={`e.g., Grade ${index + 10}`}
+                                                                                    //={`e.g., Grade ${index + 10}`}
                                                                                     className="py-2"
                                                                                 />
                                                                                 <small className="text-muted">
@@ -1351,7 +1351,7 @@ const iccrForm = () => {
                                                                 name="essay"
                                                                 value={formData.essay}
                                                                 onChange={handleChange}
-                                                                placeholder="NA"
+                                                                //="NA"
                                                                 className="py-2"
                                                             />
                                                         </Form.Group>
@@ -1364,7 +1364,7 @@ const iccrForm = () => {
                                                                 name="academicYear"
                                                                 value={formData.academicYear}
                                                                 onChange={handleChange}
-                                                                placeholder="2025"
+                                                                //="2025"
                                                                 className="py-2"
                                                             />
                                                         </Form.Group>
@@ -1377,7 +1377,7 @@ const iccrForm = () => {
                                                                 name="levelOfCourse"
                                                                 value={formData.levelOfCourse}
                                                                 onChange={handleChange}
-                                                                placeholder="UG/PG"
+                                                                //="UG/PG"
                                                                 className="py-2"
                                                             />
                                                         </Form.Group>
@@ -1390,7 +1390,7 @@ const iccrForm = () => {
                                                                 name="courseMainStream"
                                                                 value={formData.courseMainStream}
                                                                 onChange={handleChange}
-                                                                placeholder="Science/Commerce/Arts"
+                                                                //="Science/Commerce/Arts"
                                                                 className="py-2"
                                                             />
                                                         </Form.Group>
@@ -1440,7 +1440,7 @@ const iccrForm = () => {
                                                                     }}
                                                                     required
                                                                     className="py-2"
-                                                                    placeholder="Enter university name"
+                                                                    //="Enter university name"
                                                                 />
                                                             </Form.Group>
                                                         </Col>
@@ -1461,7 +1461,7 @@ const iccrForm = () => {
                                                                     }}
                                                                     required
                                                                     className="py-2"
-                                                                    placeholder="e.g., Management and Business Administration"
+                                                                    //="e.g., Management and Business Administration"
                                                                 />
                                                             </Form.Group>
                                                         </Col>
@@ -1482,7 +1482,7 @@ const iccrForm = () => {
                                                                     }}
                                                                     required
                                                                     className="py-2"
-                                                                    placeholder="e.g., Supply Chain"
+                                                                    //="e.g., Supply Chain"
                                                                 />
                                                             </Form.Group>
                                                         </Col>
