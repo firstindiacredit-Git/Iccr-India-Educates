@@ -10,7 +10,7 @@ function App() {
         <Routes>
          
           <Route path='/' element={<Iccr />}></Route>
-          <Route path='/iccr-form2' element={<IccrForm />}></Route>
+          <Route path='/iccr-form45fffefre454ff5feerffffer' element={<IccrForm />}></Route>
          
         </Routes>
       </BrowserRouter>
