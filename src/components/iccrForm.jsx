@@ -182,6 +182,7 @@ const iccrForm = () => {
             setIsSubmitting(true);
             const formDataToSend = new FormData();
 
+            // Add text fields to FormData
             Object.keys(formData).forEach(key => {
                 if (key !== 'documents' && key !== 'studentPhoto' && key !== 'signature' &&
                     !Array.isArray(formData[key]) && formData[key] !== null && formData[key] !== undefined) {
@@ -189,6 +190,7 @@ const iccrForm = () => {
                 }
             });
 
+            // Add educational qualifications
             if (formData.educationalQualifications) {
                 formData.educationalQualifications.forEach((edu, index) => {
                     Object.keys(edu).forEach(key => {
@@ -197,70 +199,64 @@ const iccrForm = () => {
                 });
             }
 
+            // Add university preferences
             if (formData.universities) {
                 formData.universities.forEach((univ, index) => {
                     formDataToSend.append(`universityPreferences[${index}][preference]`, index + 1);
                     formDataToSend.append(`universityPreferences[${index}][university]`, univ);
-                    
+
                     if (formData.subjects[index]) {
                         formDataToSend.append(`universityPreferences[${index}][subject]`, formData.subjects[index]);
                     }
-                    
+
                     if (formData.courseStreams[index]) {
                         formDataToSend.append(`universityPreferences[${index}][course]`, formData.courseStreams[index]);
                     }
                 });
             }
 
+            // Add other boolean fields with proper conversion
             formDataToSend.append('travelledInIndia', formData.travelledToIndia || '');
             formDataToSend.append('residenceInIndia', formData.indianResident || '');
             formDataToSend.append('dateOfApplication', formData.declarationDate || '');
             formDataToSend.append('placeOfApplication', formData.declarationPlace || '');
 
+            // Process and compress images before sending
             if (formData.studentPhoto) {
-                const photoFile = await fetch(formData.studentPhoto).then(r => r.blob());
-                formDataToSend.append('studentPhoto', photoFile, 'studentPhoto.jpg');
+                // Convert base64 to Blob with compression
+                const photoFile = await compressAndConvertToBlob(formData.studentPhoto, 'studentPhoto.jpg', 0.7);
+                formDataToSend.append('studentPhoto', photoFile);
             }
 
             if (formData.signature) {
-                const signatureFile = await fetch(formData.signature).then(r => r.blob());
-                formDataToSend.append('signature', signatureFile, 'signature.jpg');
+                // Convert base64 to Blob with compression
+                const signatureFile = await compressAndConvertToBlob(formData.signature, 'signature.jpg', 0.6);
+                formDataToSend.append('signature', signatureFile);
             }
 
+            // Add documents with proper file processing
             if (formData.documents) {
-                if (formData.documents.permanentUniqueId) {
-                    formDataToSend.append('permanentUniqueId', formData.documents.permanentUniqueId);
-                }
-                if (formData.documents.passportCopy) {
-                    formDataToSend.append('passportCopy', formData.documents.passportCopy);
-                }
-                if (formData.documents.gradeXMarksheet) {
-                    formDataToSend.append('gradeXMarksheet', formData.documents.gradeXMarksheet);
-                }
-                if (formData.documents.gradeXIIMarksheet) {
-                    formDataToSend.append('gradeXIIMarksheet', formData.documents.gradeXIIMarksheet);
-                }
-                if (formData.documents.medicalFitnessCertificate) {
-                    formDataToSend.append('medicalFitnessCertificate', formData.documents.medicalFitnessCertificate);
-                }
-                if (formData.documents.englishTranslationOfDocuments) {
-                    formDataToSend.append('englishTranslationOfDocuments', formData.documents.englishTranslationOfDocuments);
-                }
-                if (formData.documents.englishAsSubjectDocument) {
-                    formDataToSend.append('englishAsSubjectDocument', formData.documents.englishAsSubjectDocument);
-                }
-                if (formData.documents.anyOtherDocument) {
-                    formDataToSend.append('anyOtherDocument', formData.documents.anyOtherDocument);
+                for (const docType in formData.documents) {
+                    if (formData.documents[docType]) {
+                        // Compress the document if it's an image
+                        if (formData.documents[docType].type.startsWith('image/')) {
+                            const compressedFile = await compressFile(formData.documents[docType], 0.6);
+                            formDataToSend.append(docType, compressedFile, formData.documents[docType].name);
+                        } else {
+                            formDataToSend.append(docType, formData.documents[docType]);
+                        }
+                    }
                 }
             }
 
             const response = await axios.post(
                 `https://crm.indiaeducates.org/api/iccr`,
+                // `http://localhost:5000/api/iccr`,
                 formDataToSend,
                 {
                     headers: {
                         'Content-Type': 'multipart/form-data',
-                    },
+                    }
                 }
             );
 
@@ -316,7 +312,7 @@ const iccrForm = () => {
             alert("Maximum qualifications reached");
             return;
         }
-        
+
         setFormData(prev => ({
             ...prev,
             educationalQualifications: [
@@ -349,6 +345,12 @@ const iccrForm = () => {
     const handleSignatureUpload = (e) => {
         const file = e.target.files[0];
         if (file) {
+            // Ensure file size is not larger than 300KB
+            if (file.size > 300 * 1024) {
+                alert('Signature image size should not exceed 300KB. Please compress your image and try again.');
+                e.target.value = ''; // Reset the input
+                return;
+            }
             const reader = new FileReader();
             reader.onloadend = () => {
                 setFormData(prev => ({
@@ -363,6 +365,22 @@ const iccrForm = () => {
     const handleDocumentUpload = (e, docType) => {
         const file = e.target.files[0];
         if (file) {
+            // Set file size limits based on document type
+            let maxSize = 1024 * 1024; // Default 1MB limit
+            
+            if (docType === 'englishTranslationOfDocuments' || docType === 'anyOtherDocument') {
+                maxSize = 2 * 1024 * 1024; // 2MB for these types
+            } else if (docType === 'englishAsSubjectDocument') {
+                maxSize = 700 * 1024; // 700KB for this type
+            }
+            
+            if (file.size > maxSize) {
+                const sizeInMB = maxSize / (1024 * 1024);
+                alert(`File size should not exceed ${sizeInMB}MB for this document type. Please compress your file and try again.`);
+                e.target.value = ''; // Reset the input
+                return;
+            }
+            
             setFormData(prev => ({
                 ...prev,
                 documents: {
@@ -376,6 +394,12 @@ const iccrForm = () => {
     const handlePhotoUpload = (e) => {
         const file = e.target.files[0];
         if (file) {
+            // Ensure file size is not larger than 500KB
+            if (file.size > 500 * 1024) {
+                alert('Image size should not exceed 500KB. Please compress your image and try again.');
+                e.target.value = ''; // Reset the input
+                return;
+            }
             const reader = new FileReader();
             reader.onloadend = () => {
                 setFormData(prev => ({
@@ -438,6 +462,83 @@ const iccrForm = () => {
             </Modal.Body>
         </Modal>
     );
+
+    // Helper function to compress and convert base64 to Blob
+    const compressAndConvertToBlob = async (base64String, fileName, quality = 0.7) => {
+        // Create an image element
+        const img = document.createElement('img');
+        img.src = base64String;
+        
+        // Wait for the image to load
+        await new Promise(resolve => {
+            img.onload = resolve;
+        });
+        
+        // Create a canvas element
+        const canvas = document.createElement('canvas');
+        
+        // Set canvas dimensions to match the image
+        canvas.width = img.width;
+        canvas.height = img.height;
+        
+        // Draw the image on the canvas
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        
+        // Convert canvas to blob with compression
+        return new Promise(resolve => {
+            canvas.toBlob(blob => {
+                resolve(new File([blob], fileName, { type: 'image/jpeg' }));
+            }, 'image/jpeg', quality);
+        });
+    };
+
+    // Helper function to compress file
+    const compressFile = async (file, quality = 0.6) => {
+        // Only compress image files
+        if (!file.type.startsWith('image/')) {
+            return file;
+        }
+        
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = (event) => {
+                const img = new Image();
+                img.src = event.target.result;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    
+                    // Maintain aspect ratio but limit dimensions
+                    let width = img.width;
+                    let height = img.height;
+                    const MAX_WIDTH = 1200;
+                    const MAX_HEIGHT = 1200;
+                    
+                    if (width > height) {
+                        if (width > MAX_WIDTH) {
+                            height *= MAX_WIDTH / width;
+                            width = MAX_WIDTH;
+                        }
+                    } else {
+                        if (height > MAX_HEIGHT) {
+                            width *= MAX_HEIGHT / height;
+                            height = MAX_HEIGHT;
+                        }
+                    }
+                    
+                    canvas.width = width;
+                    canvas.height = height;
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    canvas.toBlob((blob) => {
+                        resolve(new File([blob], file.name, { type: 'image/jpeg' }));
+                    }, 'image/jpeg', quality);
+                };
+            };
+        });
+    };
 
     return (
         <div>
