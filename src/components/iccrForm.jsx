@@ -40,14 +40,6 @@ const iccrForm = () => {
         motherName: '',
         motherPhone: '',
         motherEmail: '',
-        englishProficiency1: '',
-        proficiencyLevel: '',
-        proficiencyScore: '',
-        englishProficiency2: '',
-        toeflScore: '',
-        ieltsScore: '',
-        duolingoScore: '',
-        essay: '',
         academicYear: '',
         levelOfCourse: '',
         courseMainStream: '',
@@ -79,32 +71,6 @@ const iccrForm = () => {
                 percentage: ''
             }
         ],
-        references: [
-            {
-                name: '',
-                occupation: '',
-                email: '',
-                telephone: '',
-                postalAddress: ''
-            },
-            {
-                name: '',
-                occupation: '',
-                email: '',
-                telephone: '',
-                postalAddress: ''
-            }
-        ],
-        indianContacts: [
-            {
-                name: '',
-                relationship: '',
-                occupation: '',
-                telephone: '',
-                email: '',
-                postalAddress: ''
-            }
-        ],
         travelledToIndia: '',
         previousICCRScholarship: '',
         indianResident: '',
@@ -113,7 +79,7 @@ const iccrForm = () => {
         otherInformation: '',
         declarationDate: '',
         declarationPlace: '',
-        signature: '', // Add this new field
+        signature: '',
         documents: {
             permanentUniqueId: null,
             passportCopy: null,
@@ -128,9 +94,8 @@ const iccrForm = () => {
     });
 
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [showSuccessModal, setShowSuccessModal] = useState(false); // Add this state
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-    // Add this initial form data structure
     const initialFormData = {
         fullName: '',
         gender: '',
@@ -155,14 +120,6 @@ const iccrForm = () => {
         motherName: '',
         motherPhone: '',
         motherEmail: '',
-        englishProficiency1: '',
-        proficiencyLevel: '',
-        proficiencyScore: '',
-        englishProficiency2: '',
-        toeflScore: '',
-        ieltsScore: '',
-        duolingoScore: '',
-        essay: '',
         academicYear: '',
         levelOfCourse: '',
         courseMainStream: '',
@@ -192,32 +149,6 @@ const iccrForm = () => {
                 subjects: '',
                 year: '',
                 percentage: ''
-            }
-        ],
-        references: [
-            {
-                name: '',
-                occupation: '',
-                email: '',
-                telephone: '',
-                postalAddress: ''
-            },
-            {
-                name: '',
-                occupation: '',
-                email: '',
-                telephone: '',
-                postalAddress: ''
-            }
-        ],
-        indianContacts: [
-            {
-                name: '',
-                relationship: '',
-                occupation: '',
-                telephone: '',
-                email: '',
-                postalAddress: ''
             }
         ],
         travelledToIndia: '',
@@ -251,7 +182,6 @@ const iccrForm = () => {
             setIsSubmitting(true);
             const formDataToSend = new FormData();
 
-            // Add all text fields
             Object.keys(formData).forEach(key => {
                 if (key !== 'documents' && key !== 'studentPhoto' && key !== 'signature' &&
                     !Array.isArray(formData[key]) && formData[key] !== null && formData[key] !== undefined) {
@@ -259,7 +189,6 @@ const iccrForm = () => {
                 }
             });
 
-            // Handle arrays
             if (formData.educationalQualifications) {
                 formData.educationalQualifications.forEach((edu, index) => {
                     Object.keys(edu).forEach(key => {
@@ -283,31 +212,11 @@ const iccrForm = () => {
                 });
             }
 
-            if (formData.references) {
-                formData.references.forEach((ref, index) => {
-                    Object.keys(ref).forEach(key => {
-                        formDataToSend.append(`references[${index}][${key === 'telephone' ? 'phone' : key === 'postalAddress' ? 'address' : key}]`, ref[key]);
-                    });
-                });
-            }
-
-            if (formData.indianContacts) {
-                formData.indianContacts.forEach((contact, index) => {
-                    Object.keys(contact).forEach(key => {
-                        formDataToSend.append(`indianContacts[${index}][${key === 'name' ? 'contactName' : key === 'postalAddress' ? 'address' : key}]`, contact[key]);
-                    });
-                });
-            }
-
-            // Map form fields to backend model fields
-            formDataToSend.append('tillWhatLevel1', formData.proficiencyLevel || '');
-            formDataToSend.append('score1', formData.proficiencyScore || '');
             formDataToSend.append('travelledInIndia', formData.travelledToIndia || '');
             formDataToSend.append('residenceInIndia', formData.indianResident || '');
             formDataToSend.append('dateOfApplication', formData.declarationDate || '');
             formDataToSend.append('placeOfApplication', formData.declarationPlace || '');
 
-            // Handle file uploads
             if (formData.studentPhoto) {
                 const photoFile = await fetch(formData.studentPhoto).then(r => r.blob());
                 formDataToSend.append('studentPhoto', photoFile, 'studentPhoto.jpg');
@@ -318,7 +227,6 @@ const iccrForm = () => {
                 formDataToSend.append('signature', signatureFile, 'signature.jpg');
             }
 
-            // Handle document uploads
             if (formData.documents) {
                 if (formData.documents.permanentUniqueId) {
                     formDataToSend.append('permanentUniqueId', formData.documents.permanentUniqueId);
@@ -348,7 +256,6 @@ const iccrForm = () => {
 
             const response = await axios.post(
                 `https://crm.indiaeducates.org/api/iccr`,
-                // `http://localhost:5000/api/iccr`,
                 formDataToSend,
                 {
                     headers: {
@@ -357,9 +264,7 @@ const iccrForm = () => {
                 }
             );
 
-            // If we reach here, the submission was successful
             setShowSuccessModal(true);
-            // Reset form data
             setFormData({
                 ...initialFormData,
                 documents: {
@@ -377,11 +282,9 @@ const iccrForm = () => {
 
         } catch (error) {
             console.error('Error submitting application:', error);
-            // Only show error alert if it's actually a submission error
             if (!error.message.includes('Failed to reload')) {
                 alert('Failed to submit application. Please try again.');
             } else {
-                // If it's just a Vite reload error, still show success if data was saved
                 setShowSuccessModal(true);
             }
         } finally {
@@ -397,9 +300,8 @@ const iccrForm = () => {
         }));
     };
 
-    // Add this function to handle adding new preference
     const handleAddPreference = () => {
-        if (formData.universities.length < 5) {  // Maximum 5 preferences
+        if (formData.universities.length < 5) {
             setFormData(prev => ({
                 ...prev,
                 universities: [...prev.universities, ''],
@@ -409,8 +311,12 @@ const iccrForm = () => {
         }
     };
 
-    // Add this function to handle adding new qualification
     const handleAddQualification = () => {
+        if (formData.educationalQualifications.length >= 10) {
+            alert("Maximum qualifications reached");
+            return;
+        }
+        
         setFormData(prev => ({
             ...prev,
             educationalQualifications: [
@@ -428,7 +334,6 @@ const iccrForm = () => {
         }));
     };
 
-    // Add this function to handle qualification changes
     const handleQualificationChange = (index, field, value) => {
         const newQualifications = [...formData.educationalQualifications];
         newQualifications[index] = {
@@ -441,72 +346,6 @@ const iccrForm = () => {
         }));
     };
 
-    // Add this function to handle reference changes
-    const handleReferenceChange = (index, field, value) => {
-        const newReferences = [...formData.references];
-        newReferences[index] = {
-            ...newReferences[index],
-            [field]: value
-        };
-        setFormData(prev => ({
-            ...prev,
-            references: newReferences
-        }));
-    };
-
-    // Add this function to handle adding new reference
-    const handleAddReference = () => {
-        if (formData.references.length < 5) {  // Maximum 5 references
-            setFormData(prev => ({
-                ...prev,
-                references: [
-                    ...prev.references,
-                    {
-                        name: '',
-                        occupation: '',
-                        email: '',
-                        telephone: '',
-                        postalAddress: ''
-                    }
-                ]
-            }));
-        }
-    };
-
-    // Add this function to handle Indian contact changes
-    const handleIndianContactChange = (index, field, value) => {
-        const newContacts = [...formData.indianContacts];
-        newContacts[index] = {
-            ...newContacts[index],
-            [field]: value
-        };
-        setFormData(prev => ({
-            ...prev,
-            indianContacts: newContacts
-        }));
-    };
-
-    // Add this function to handle adding new Indian contact
-    const handleAddIndianContact = () => {
-        if (formData.indianContacts.length < 5) {  // Maximum 5 contacts
-            setFormData(prev => ({
-                ...prev,
-                indianContacts: [
-                    ...prev.indianContacts,
-                    {
-                        name: '',
-                        relationship: '',
-                        occupation: '',
-                        telephone: '',
-                        email: '',
-                        postalAddress: ''
-                    }
-                ]
-            }));
-        }
-    };
-
-    // Add this new function to handle signature upload
     const handleSignatureUpload = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -521,7 +360,6 @@ const iccrForm = () => {
         }
     };
 
-    // Add this new handler for document uploads
     const handleDocumentUpload = (e, docType) => {
         const file = e.target.files[0];
         if (file) {
@@ -535,7 +373,6 @@ const iccrForm = () => {
         }
     };
 
-    // Add this handler function with your other handlers
     const handlePhotoUpload = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -550,7 +387,6 @@ const iccrForm = () => {
         }
     };
 
-    // Update the SuccessModal component
     const SuccessModal = () => (
         <Modal
             show={showSuccessModal}
@@ -558,8 +394,8 @@ const iccrForm = () => {
             size="lg"
             onHide={() => {
                 setShowSuccessModal(false);
-                setFormData(initialFormData); // Reset form data when closing modal
-                window.scrollTo(0, 0); // Scroll to top of page
+                setFormData(initialFormData);
+                window.scrollTo(0, 0);
             }}
         >
             <Modal.Body className="text-center p-5">
@@ -588,8 +424,8 @@ const iccrForm = () => {
                         size="lg"
                         onClick={() => {
                             setShowSuccessModal(false);
-                            setFormData(initialFormData); // Reset form data when clicking close button
-                            window.scrollTo(0, 0); // Scroll to top of page
+                            setFormData(initialFormData);
+                            window.scrollTo(0, 0);
                         }}
                         style={{
                             borderRadius: '50px',
@@ -603,11 +439,8 @@ const iccrForm = () => {
         </Modal>
     );
 
-
     return (
-
         <div>
-            {/* Application Form */}
             <Row className="mb-5">
                 <Col md={10} className="mx-auto">
                     <Card className="border-0" style={{
@@ -658,7 +491,6 @@ const iccrForm = () => {
 
                             <Form onSubmit={handleSubmit}>
                                 <Row className="g-4">
-                                    {/* Personal Information Card */}
                                     <Col md={12}>
                                         <Card className="border-0 shadow-sm mb-4" style={{
                                             borderRadius: '12px',
@@ -694,7 +526,6 @@ const iccrForm = () => {
                                                     </h5>
                                                 </div>
 
-                                                {/* Existing form fields with enhanced styling */}
                                                 <style>
                                                     {`
                                                             .form-control, .form-select {
@@ -725,9 +556,7 @@ const iccrForm = () => {
                                                         `}
                                                 </style>
 
-                                                {/* Keep existing form fields */}
                                                 <Row className="g-3">
-                                                    {/* Basic Personal Details */}
                                                     <Col md={10}>
                                                         <Form.Group>
                                                             <Form.Label className="fw-semibold">Full Name (IN BLOCK LETTERS) <span className="text-danger">*</span></Form.Label>
@@ -738,11 +567,9 @@ const iccrForm = () => {
                                                                 onChange={handleChange}
                                                                 required
                                                                 className="py-2"
-                                                                //="JOHN DOE"
                                                             />
                                                         </Form.Group>
                                                     </Col>
-                                                    {/* Photo Upload Section */}
                                                     <Col md={2}>
                                                         <div className="d-flex align-items-start">
                                                             <div className="me-4" style={{ width: '200px' }}>
@@ -822,14 +649,10 @@ const iccrForm = () => {
                                                                         className="py-2"
                                                                         style={{ display: 'none' }}
                                                                     />
-                                                                    {/* <Form.Text className="text-muted d-block">
-                                                                             (max 1MB)
-                                                                        </Form.Text> */}
                                                                 </Form.Group>
                                                             </div>
                                                         </div>
                                                     </Col>
-                                                    {/* Personal Details Row 1 */}
                                                     <Col md={4}>
                                                         <Form.Group>
                                                             <Form.Label className="fw-semibold">Date of Birth <span className="text-danger">*</span></Form.Label>
@@ -870,11 +693,9 @@ const iccrForm = () => {
                                                                 onChange={handleChange}
                                                                 required
                                                                 className="py-2"
-                                                                //="City, Country"
                                                             />
                                                         </Form.Group>
                                                     </Col>
-                                                    {/* Contact Information */}
                                                     <Col md={4}>
                                                         <Form.Group>
                                                             <Form.Label className="fw-semibold">Mobile Number <span className="text-danger">*</span></Form.Label>
@@ -885,7 +706,6 @@ const iccrForm = () => {
                                                                 onChange={handleChange}
                                                                 required
                                                                 className="py-2"
-                                                                //="+220263765"
                                                             />
                                                         </Form.Group>
                                                     </Col>
@@ -898,7 +718,6 @@ const iccrForm = () => {
                                                                 value={formData.whatsappNumber}
                                                                 onChange={handleChange}
                                                                 className="py-2"
-                                                                //="+220263765"
                                                             />
                                                         </Form.Group>
                                                     </Col>
@@ -912,11 +731,9 @@ const iccrForm = () => {
                                                                 onChange={handleChange}
                                                                 required
                                                                 className="py-2"
-                                                                //="example@email.com"
                                                             />
                                                         </Form.Group>
                                                     </Col>
-                                                    {/* Passport Information */}
                                                     <Col md={12}>
                                                         <h6 className="mb-3 mt-2 text-success">Passport Details</h6>
                                                     </Col>
@@ -930,7 +747,6 @@ const iccrForm = () => {
                                                                 onChange={handleChange}
                                                                 required
                                                                 className="py-2"
-                                                                //="AB1234567"
                                                             />
                                                         </Form.Group>
                                                     </Col>
@@ -944,7 +760,6 @@ const iccrForm = () => {
                                                                 onChange={handleChange}
                                                                 required
                                                                 className="py-2"
-                                                                //="City, Country"
                                                             />
                                                         </Form.Group>
                                                     </Col>
@@ -974,9 +789,8 @@ const iccrForm = () => {
                                                             />
                                                         </Form.Group>
                                                     </Col>
-                                                    {/* Address Information */}
                                                     <Col md={12}>
-                                                        <h6 className="mb-3 mt-2 text-success">Postal Address</h6>
+                                                        <h6 className="mb-3 mt-2">Postal Address</h6>
                                                     </Col>
                                                     <Col md={6}>
                                                         <Form.Group>
@@ -988,7 +802,6 @@ const iccrForm = () => {
                                                                 onChange={handleChange}
                                                                 required
                                                                 className="py-2"
-                                                                //="Street Address"
                                                             />
                                                         </Form.Group>
                                                     </Col>
@@ -1002,7 +815,6 @@ const iccrForm = () => {
                                                                 onChange={handleChange}
                                                                 required
                                                                 className="py-2"
-                                                                //="City"
                                                             />
                                                         </Form.Group>
                                                     </Col>
@@ -1016,7 +828,6 @@ const iccrForm = () => {
                                                                 onChange={handleChange}
                                                                 required
                                                                 className="py-2"
-                                                                //="State"
                                                             />
                                                         </Form.Group>
                                                     </Col>
@@ -1030,7 +841,6 @@ const iccrForm = () => {
                                                                 onChange={handleChange}
                                                                 required
                                                                 className="py-2"
-                                                                //="Country"
                                                             />
                                                         </Form.Group>
                                                     </Col>
@@ -1044,7 +854,6 @@ const iccrForm = () => {
                                                                 onChange={handleChange}
                                                                 required
                                                                 className="py-2"
-                                                                //="123456"
                                                             />
                                                         </Form.Group>
                                                     </Col>
@@ -1074,7 +883,6 @@ const iccrForm = () => {
                                                                         onChange={handleChange}
                                                                         required
                                                                         className="py-2"
-                                                                        //="+220263765"
                                                                     />
                                                                 </Form.Group>
                                                             </Col>
@@ -1114,7 +922,6 @@ const iccrForm = () => {
                                                                         onChange={handleChange}
                                                                         required
                                                                         className="py-2"
-                                                                        //="+220263765"
                                                                     />
                                                                 </Form.Group>
                                                             </Col>
@@ -1127,107 +934,6 @@ const iccrForm = () => {
                                                                         value={formData.motherEmail}
                                                                         onChange={handleChange}
                                                                         required
-                                                                        className="py-2"
-                                                                    />
-                                                                </Form.Group>
-                                                            </Col>
-                                                        </Row>
-                                                    </Col>
-                                                    <Col md={12}>
-                                                        <h6 className="mb-3 mt-2">English Proficiency</h6>
-                                                        <Row className="g-3">
-                                                            <Col md={4}>
-                                                                <Form.Group>
-                                                                    <Form.Label className="fw-semibold">English Proficiency - I</Form.Label>
-                                                                    <Form.Select
-                                                                        name="englishProficiency1"
-                                                                        value={formData.englishProficiency1}
-                                                                        onChange={handleChange}
-                                                                        required
-                                                                        className="py-2"
-                                                                    >
-                                                                        <option value="">Select</option>
-                                                                        <option value="yes">Yes</option>
-                                                                        <option value="no">No</option>
-                                                                    </Form.Select>
-                                                                </Form.Group>
-                                                            </Col>
-                                                            <Col md={4}>
-                                                                <Form.Group>
-                                                                    <Form.Label className="fw-semibold">Till What Level</Form.Label>
-                                                                    <Form.Control
-                                                                        type="text"
-                                                                        name="proficiencyLevel"
-                                                                        value={formData.proficiencyLevel}
-                                                                        onChange={handleChange}
-                                                                        //="1"
-                                                                        className="py-2"
-                                                                    />
-                                                                </Form.Group>
-                                                            </Col>
-                                                            <Col md={4}>
-                                                                <Form.Group>
-                                                                    <Form.Label className="fw-semibold">Score/Percentage</Form.Label>
-                                                                    <Form.Control
-                                                                        type="text"
-                                                                        name="proficiencyScore"
-                                                                        value={formData.proficiencyScore}
-                                                                        onChange={handleChange}
-                                                                        //="60"
-                                                                        className="py-2"
-                                                                    />
-                                                                </Form.Group>
-                                                            </Col>
-                                                            <Col md={3}>
-                                                                <Form.Group>
-                                                                    <Form.Label className="fw-semibold">English Proficiency - II</Form.Label>
-                                                                    <Form.Select
-                                                                        name="englishProficiency2"
-                                                                        value={formData.englishProficiency2}
-                                                                        onChange={handleChange}
-                                                                        className="py-2"
-                                                                    >
-                                                                        <option value="">Select</option>
-                                                                        <option value="yes">Yes</option>
-                                                                        <option value="no">No</option>
-                                                                    </Form.Select>
-                                                                </Form.Group>
-                                                            </Col>
-                                                            <Col md={3}>
-                                                                <Form.Group>
-                                                                    <Form.Label className="fw-semibold">TOEFL Score</Form.Label>
-                                                                    <Form.Control
-                                                                        type="text"
-                                                                        name="toeflScore"
-                                                                        value={formData.toeflScore}
-                                                                        onChange={handleChange}
-                                                                        //="NA"
-                                                                        className="py-2"
-                                                                    />
-                                                                </Form.Group>
-                                                            </Col>
-                                                            <Col md={3}>
-                                                                <Form.Group>
-                                                                    <Form.Label className="fw-semibold">IELTS Score</Form.Label>
-                                                                    <Form.Control
-                                                                        type="text"
-                                                                        name="ieltsScore"
-                                                                        value={formData.ieltsScore}
-                                                                        onChange={handleChange}
-                                                                        //="NA"
-                                                                        className="py-2"
-                                                                    />
-                                                                </Form.Group>
-                                                            </Col>
-                                                            <Col md={3}>
-                                                                <Form.Group>
-                                                                    <Form.Label className="fw-semibold">Duolingo Score</Form.Label>
-                                                                    <Form.Control
-                                                                        type="text"
-                                                                        name="duolingoScore"
-                                                                        value={formData.duolingoScore}
-                                                                        onChange={handleChange}
-                                                                        //="NA"
                                                                         className="py-2"
                                                                     />
                                                                 </Form.Group>
@@ -1257,7 +963,6 @@ const iccrForm = () => {
                                                                                     type="text"
                                                                                     value={qual.certificate}
                                                                                     onChange={(e) => handleQualificationChange(index, 'certificate', e.target.value)}
-                                                                                    //={`e.g., Grade ${index + 10}`}
                                                                                     className="py-2"
                                                                                 />
                                                                                 <small className="text-muted">
@@ -1318,7 +1023,6 @@ const iccrForm = () => {
                                                             </table>
                                                         </div>
 
-                                                        {/* Add Qualification Button */}
                                                         <div className="text-center mt-3">
                                                             <Button
                                                                 onClick={handleAddQualification}
@@ -1342,20 +1046,6 @@ const iccrForm = () => {
                                                             </Button>
                                                         </div>
                                                     </Col>
-                                                    <Col md={12}>
-                                                        <Form.Group>
-                                                            <Form.Label className="fw-semibold">Essay</Form.Label>
-                                                            <Form.Control
-                                                                as="textarea"
-                                                                rows={5}
-                                                                name="essay"
-                                                                value={formData.essay}
-                                                                onChange={handleChange}
-                                                                //="NA"
-                                                                className="py-2"
-                                                            />
-                                                        </Form.Group>
-                                                    </Col>
                                                     <Col md={4}>
                                                         <Form.Group>
                                                             <Form.Label className="fw-semibold">Academic Year</Form.Label>
@@ -1364,7 +1054,6 @@ const iccrForm = () => {
                                                                 name="academicYear"
                                                                 value={formData.academicYear}
                                                                 onChange={handleChange}
-                                                                //="2025"
                                                                 className="py-2"
                                                             />
                                                         </Form.Group>
@@ -1377,7 +1066,6 @@ const iccrForm = () => {
                                                                 name="levelOfCourse"
                                                                 value={formData.levelOfCourse}
                                                                 onChange={handleChange}
-                                                                //="UG/PG"
                                                                 className="py-2"
                                                             />
                                                         </Form.Group>
@@ -1390,7 +1078,6 @@ const iccrForm = () => {
                                                                 name="courseMainStream"
                                                                 value={formData.courseMainStream}
                                                                 onChange={handleChange}
-                                                                //="Science/Commerce/Arts"
                                                                 className="py-2"
                                                             />
                                                         </Form.Group>
@@ -1440,7 +1127,6 @@ const iccrForm = () => {
                                                                     }}
                                                                     required
                                                                     className="py-2"
-                                                                    //="Enter university name"
                                                                 />
                                                             </Form.Group>
                                                         </Col>
@@ -1461,7 +1147,6 @@ const iccrForm = () => {
                                                                     }}
                                                                     required
                                                                     className="py-2"
-                                                                    //="e.g., Management and Business Administration"
                                                                 />
                                                             </Form.Group>
                                                         </Col>
@@ -1482,14 +1167,12 @@ const iccrForm = () => {
                                                                     }}
                                                                     required
                                                                     className="py-2"
-                                                                    //="e.g., Supply Chain"
                                                                 />
                                                             </Form.Group>
                                                         </Col>
                                                     </Row>
                                                 ))}
 
-                                                {/* Add Preference Button */}
                                                 {formData.universities.length < 5 && (
                                                     <div className="text-center mt-3">
                                                         <Button
@@ -1518,225 +1201,6 @@ const iccrForm = () => {
                                         </Card>
                                     </Col>
 
-                                    <Col md={12}>
-                                        <Card className="border-0 shadow-sm mb-4">
-                                            <Card.Body>
-                                                <h5 className="mb-4" style={{ color: '#1a1a1a', fontWeight: '600' }}>
-                                                    <PersonCheckFill className="me-2 text-success" />
-                                                    References
-                                                </h5>
-                                                <div className="alert alert-info">
-                                                    <small>Give below the names of two persons who have agreed to testify from their personal knowledge to your character (they must not be related to you and should have direct knowledge of your academic pursuits).</small>
-                                                </div>
-                                                {formData.references.map((reference, index) => (
-                                                    <div key={index} className="mb-4">
-                                                        <h6 className="mb-3">Reference {index + 1}</h6>
-                                                        <Row className="g-3">
-                                                            <Col md={3}>
-                                                                <Form.Group>
-                                                                    <Form.Label className="fw-semibold">Name</Form.Label>
-                                                                    <Form.Control
-                                                                        type="text"
-                                                                        value={reference.name}
-                                                                        onChange={(e) => handleReferenceChange(index, 'name', e.target.value)}
-                                                                        required
-                                                                        className="py-2"
-                                                                    />
-                                                                </Form.Group>
-                                                            </Col>
-                                                            <Col md={2}>
-                                                                <Form.Group>
-                                                                    <Form.Label className="fw-semibold">Occupation</Form.Label>
-                                                                    <Form.Control
-                                                                        type="text"
-                                                                        value={reference.occupation}
-                                                                        onChange={(e) => handleReferenceChange(index, 'occupation', e.target.value)}
-                                                                        required
-                                                                        className="py-2"
-                                                                    />
-                                                                </Form.Group>
-                                                            </Col>
-                                                            <Col md={3}>
-                                                                <Form.Group>
-                                                                    <Form.Label className="fw-semibold">Email</Form.Label>
-                                                                    <Form.Control
-                                                                        type="email"
-                                                                        value={reference.email}
-                                                                        onChange={(e) => handleReferenceChange(index, 'email', e.target.value)}
-                                                                        required
-                                                                        className="py-2"
-                                                                    />
-                                                                </Form.Group>
-                                                            </Col>
-                                                            <Col md={2}>
-                                                                <Form.Group>
-                                                                    <Form.Label className="fw-semibold">Telephone</Form.Label>
-                                                                    <Form.Control
-                                                                        type="tel"
-                                                                        value={reference.telephone}
-                                                                        onChange={(e) => handleReferenceChange(index, 'telephone', e.target.value)}
-                                                                        required
-                                                                        className="py-2"
-                                                                    />
-                                                                </Form.Group>
-                                                            </Col>
-                                                            <Col md={2}>
-                                                                <Form.Group>
-                                                                    <Form.Label className="fw-semibold">Postal Address</Form.Label>
-                                                                    <Form.Control
-                                                                        type="text"
-                                                                        value={reference.postalAddress}
-                                                                        onChange={(e) => handleReferenceChange(index, 'postalAddress', e.target.value)}
-                                                                        required
-                                                                        className="py-2"
-                                                                    />
-                                                                </Form.Group>
-                                                            </Col>
-                                                        </Row>
-                                                    </div>
-                                                ))}
-
-                                                {/* Add Reference Button */}
-                                                {formData.references.length < 5 && (
-                                                    <div className="text-center mt-3">
-                                                        <Button
-                                                            onClick={handleAddReference}
-                                                            variant="outline-success"
-                                                            className="px-4 py-2"
-                                                            style={{
-                                                                borderRadius: '50px',
-                                                                transition: 'all 0.3s ease'
-                                                            }}
-                                                            onMouseOver={(e) => {
-                                                                e.currentTarget.style.transform = 'translateY(-2px)';
-                                                                e.currentTarget.style.boxShadow = '0 4px 8px rgba(40,167,69,0.2)';
-                                                            }}
-                                                            onMouseOut={(e) => {
-                                                                e.currentTarget.style.transform = 'translateY(0)';
-                                                                e.currentTarget.style.boxShadow = 'none';
-                                                            }}
-                                                        >
-                                                            <i className="bi bi-plus-circle me-2"></i>
-                                                            Add Another Reference
-                                                        </Button>
-                                                    </div>
-                                                )}
-                                            </Card.Body>
-                                        </Card>
-                                    </Col>
-
-                                    {/* Add this section after References and before Submit button */}
-                                    <Col md={12}>
-                                        <Card className="border-0 shadow-sm mb-4">
-                                            <Card.Body>
-                                                <h5 className="mb-4" style={{ color: '#1a1a1a', fontWeight: '600' }}>
-                                                    <PersonCheckFill className="me-2 text-success" />
-                                                    Details of Close Relative(s) or Friends in India
-                                                </h5>
-                                                {formData.indianContacts.map((contact, index) => (
-                                                    <div key={index} className="mb-4">
-                                                        <h6 className="mb-3">Contact {index + 1}</h6>
-                                                        <Row className="g-3">
-                                                            <Col md={2}>
-                                                                <Form.Group>
-                                                                    <Form.Label className="fw-semibold">Name</Form.Label>
-                                                                    <Form.Control
-                                                                        type="text"
-                                                                        value={contact.name}
-                                                                        onChange={(e) => handleIndianContactChange(index, 'name', e.target.value)}
-                                                                        className="py-2"
-                                                                    />
-                                                                </Form.Group>
-                                                            </Col>
-                                                            <Col md={2}>
-                                                                <Form.Group>
-                                                                    <Form.Label className="fw-semibold">Relationship</Form.Label>
-                                                                    <Form.Control
-                                                                        type="text"
-                                                                        value={contact.relationship}
-                                                                        onChange={(e) => handleIndianContactChange(index, 'relationship', e.target.value)}
-                                                                        className="py-2"
-                                                                    />
-                                                                </Form.Group>
-                                                            </Col>
-                                                            <Col md={2}>
-                                                                <Form.Group>
-                                                                    <Form.Label className="fw-semibold">Occupation</Form.Label>
-                                                                    <Form.Control
-                                                                        type="text"
-                                                                        value={contact.occupation}
-                                                                        onChange={(e) => handleIndianContactChange(index, 'occupation', e.target.value)}
-                                                                        className="py-2"
-                                                                    />
-                                                                </Form.Group>
-                                                            </Col>
-                                                            <Col md={2}>
-                                                                <Form.Group>
-                                                                    <Form.Label className="fw-semibold">Telephone</Form.Label>
-                                                                    <Form.Control
-                                                                        type="tel"
-                                                                        value={contact.telephone}
-                                                                        onChange={(e) => handleIndianContactChange(index, 'telephone', e.target.value)}
-                                                                        className="py-2"
-                                                                    />
-                                                                </Form.Group>
-                                                            </Col>
-                                                            <Col md={2}>
-                                                                <Form.Group>
-                                                                    <Form.Label className="fw-semibold">Email</Form.Label>
-                                                                    <Form.Control
-                                                                        type="email"
-                                                                        value={contact.email}
-                                                                        onChange={(e) => handleIndianContactChange(index, 'email', e.target.value)}
-                                                                        className="py-2"
-                                                                    />
-                                                                </Form.Group>
-                                                            </Col>
-                                                            <Col md={2}>
-                                                                <Form.Group>
-                                                                    <Form.Label className="fw-semibold">Postal Address</Form.Label>
-                                                                    <Form.Control
-                                                                        type="text"
-                                                                        value={contact.postalAddress}
-                                                                        onChange={(e) => handleIndianContactChange(index, 'postalAddress', e.target.value)}
-                                                                        className="py-2"
-                                                                    />
-                                                                </Form.Group>
-                                                            </Col>
-                                                        </Row>
-                                                    </div>
-                                                ))}
-
-                                                {/* Add Contact Button */}
-                                                {formData.indianContacts.length < 5 && (
-                                                    <div className="text-center mt-3">
-                                                        <Button
-                                                            onClick={handleAddIndianContact}
-                                                            variant="outline-success"
-                                                            className="px-4 py-2"
-                                                            style={{
-                                                                borderRadius: '50px',
-                                                                transition: 'all 0.3s ease'
-                                                            }}
-                                                            onMouseOver={(e) => {
-                                                                e.currentTarget.style.transform = 'translateY(-2px)';
-                                                                e.currentTarget.style.boxShadow = '0 4px 8px rgba(40,167,69,0.2)';
-                                                            }}
-                                                            onMouseOut={(e) => {
-                                                                e.currentTarget.style.transform = 'translateY(0)';
-                                                                e.currentTarget.style.boxShadow = 'none';
-                                                            }}
-                                                        >
-                                                            <i className="bi bi-plus-circle me-2"></i>
-                                                            Add Another Contact
-                                                        </Button>
-                                                    </div>
-                                                )}
-                                            </Card.Body>
-                                        </Card>
-                                    </Col>
-
-                                    {/* Add this section before the Submit button */}
                                     <Col md={12}>
                                         <Card className="border-0 shadow-sm mb-4">
                                             <Card.Body>
@@ -1863,7 +1327,6 @@ const iccrForm = () => {
                                                             />
                                                         </Form.Group>
                                                     </Col>
-                                                    {/* Signature Upload Section - Replace the existing signature upload code with this */}
                                                     <Col md={6}>
                                                         <div className="d-flex align-items-start">
                                                             <div className="me-4" style={{ width: '200px' }}>
@@ -1960,7 +1423,6 @@ const iccrForm = () => {
                                         </Card>
                                     </Col>
 
-                                    {/* Add this new section before the Submit button */}
                                     <Col md={12}>
                                         <Card className="border-0 shadow-sm mb-4">
                                             <Card.Body>
@@ -2073,7 +1535,6 @@ const iccrForm = () => {
                                         </Card>
                                     </Col>
 
-                                    {/* Submit Button with enhanced styling */}
                                     <Col md={12} className="text-center mt-5">
                                         <Button
                                             type="submit"
