@@ -151,7 +151,7 @@ const ICCR = () => {
             if (err.response?.status === 400) {
                 setError('You have already submitted an application with this email or phone number. Please use different contact details.');
             } else {
-                setError(err.response?.data?.message || 'Something went wrong!');
+                setError(err.response?.data?.message || 'No Internet Connection!');
             }
 
             // Scroll to error message
